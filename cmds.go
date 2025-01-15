@@ -6,9 +6,8 @@ import (
 )
 
 type commands map[string]func() error
-type command func() error
 
-func (c commands) add(name string, f command) {
+func (c commands) add(name string, f func() error) {
 	c[name] = f
 }
 
