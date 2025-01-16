@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func handlerHello() error {
+func handlerHello(s *state, args []string) error {
 	fmt.Println("hello")
 	return nil
 }
