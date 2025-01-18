@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -36,7 +37,15 @@ func (c *Client) migrate() error {
 
 	_, err := c.db.Exec(usersTable)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create users table: %v", err)
+	}
+
+	return nil
+}
+
+func (c *Client) Reset() error {
+	if _, err := c.db.Exec("DELETE FROM users"); err != nil {
+		return fmt.Errorf("failed to reset users table: %v", err)
 	}
 
 	return nil
