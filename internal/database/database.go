@@ -29,6 +29,7 @@ func (c *Client) migrate() error {
 	usersTable := `
 	CREATE TABLE IF NOT EXISTS users (
 	id TEXT PRIMARY KEY,
+	username TEXT NOT NULL UNIQUE,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	password TEXT NOT NULL
