@@ -7,8 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func HashPassword(plaintext string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(plaintext), bcrypt.DefaultCost)
+func HashPassword(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", err
 	}
@@ -16,8 +16,8 @@ func HashPassword(plaintext string) (string, error) {
 	return string(hash), nil
 }
 
-func CheckPasswordHash(plaintext, hash string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(plaintext))
+func CheckPasswordHash(password, hash string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 }
 
 func GenerateAPIKey() (string, error) {

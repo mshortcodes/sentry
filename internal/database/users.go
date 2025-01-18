@@ -1,10 +1,21 @@
 package database
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
+
+type User struct {
+	Id        uuid.UUID
+	Username  string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Password  string
+}
 
 type CreateUserParams struct {
 	Username string
@@ -24,4 +35,27 @@ func (c Client) CreateUser(params CreateUserParams) error {
 	}
 
 	return nil
+}
+
+func (c Client) GetUserByUsername(username string) (User, error) {
+	query := `
+	SELECT * FROM users
+	WHERE username = ?
+	`
+
+	var user User
+
+	if err := c.db.QueryRow(query, username).Scan(
+		&user.Id,
+		&user.Username,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.Password); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return User{}, fmt.Errorf("no users with that username")
+		}
+		return User{}, err
+	}
+
+	return user, nil
 }
