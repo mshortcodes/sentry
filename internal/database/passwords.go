@@ -16,13 +16,13 @@ type Password struct {
 	UserID    uuid.UUID
 }
 
-type CreatePasswordParams struct {
-	Name     uuid.UUID
+type AddPasswordParams struct {
+	Name     string
 	Password string
-	UserID   string
+	UserID   uuid.UUID
 }
 
-func (c Client) CreatePassword(params CreatePasswordParams) error {
+func (c Client) AddPassword(params AddPasswordParams) error {
 	id := uuid.New()
 
 	query := `
@@ -37,7 +37,7 @@ func (c Client) CreatePassword(params CreatePasswordParams) error {
 		params.Password,
 		params.UserID,
 	); err != nil {
-		return fmt.Errorf("failed to create password")
+		return fmt.Errorf("failed to add password")
 	}
 
 	return nil

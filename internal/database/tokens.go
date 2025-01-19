@@ -41,17 +41,16 @@ func (c Client) CreateToken(params CreateTokenParams) error {
 	return nil
 }
 
-func (c Client) GetToken(userID uuid.UUID) (Token, error) {
+func (c Client) GetToken() (Token, error) {
 	var token Token
 
 	query := `
 	SELECT * FROM tokens
 	WHERE expires_at > CURRENT_TIMESTAMP
-	AND user_id = ?
 	ORDER BY expires_at DESC
 	`
 
-	if err := c.db.QueryRow(query, userID).Scan(
+	if err := c.db.QueryRow(query).Scan(
 		&token.Token,
 		&token.CreatedAt,
 		&token.UpdatedAt,
