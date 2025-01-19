@@ -26,6 +26,11 @@ func NewClient(dbPath string) (Client, error) {
 }
 
 func (c *Client) migrate() error {
+	_, err := c.db.Exec("PRAGMA foreign_keys = ON")
+	if err != nil {
+		return fmt.Errorf("failed to enable foreign keys")
+	}
+
 	usersTable := `
 	CREATE TABLE IF NOT EXISTS users (
 		id TEXT PRIMARY KEY,
@@ -36,9 +41,27 @@ func (c *Client) migrate() error {
 	);
 	`
 
-	_, err := c.db.Exec(usersTable)
+	_, err = c.db.Exec(usersTable)
 	if err != nil {
 		return fmt.Errorf("failed to create users table: %v", err)
+	}
+
+	passwords := `
+	CREATE TABLE IF NOT EXISTS passwords (
+		id TEXT PRIMARY KEY,
+		name TEXT NOT NULL,
+		password TEXT NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		user_id TEXT NOT NULL,
+		UNIQUE(user_id, name),
+		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+	)
+	`
+
+	_, err = c.db.Exec(passwords)
+	if err != nil {
+		return fmt.Errorf("failed to created passwords table")
 	}
 
 	tokens := `
@@ -47,7 +70,8 @@ func (c *Client) migrate() error {
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		user_id TEXT NOT NULL,
-		expires_at TIMESTAMP NOT NULL
+		expires_at TIMESTAMP NOT NULL,
+		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
 	`
 
@@ -61,11 +85,7 @@ func (c *Client) migrate() error {
 
 func (c *Client) Reset() error {
 	if _, err := c.db.Exec("DELETE FROM users"); err != nil {
-		return fmt.Errorf("failed to reset users table: %v", err)
-	}
-
-	if _, err := c.db.Exec("DELETE FROM tokens"); err != nil {
-		return fmt.Errorf("failed to reset tokens table: %v", err)
+		return fmt.Errorf("failed to reset the database: %v", err)
 	}
 
 	return nil

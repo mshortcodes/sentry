@@ -31,9 +31,6 @@ func handlerLogin(s *state, args []string) error {
 		return fmt.Errorf("error generating token: %v", err)
 	}
 
-	dbToken, err := s.db.GetToken(user.Id)
-	fmt.Printf("%+v", dbToken)
-
 	if err = s.db.CreateToken(database.CreateTokenParams{
 		Token:     token,
 		UserID:    user.Id,
@@ -43,7 +40,7 @@ func handlerLogin(s *state, args []string) error {
 	}
 
 	fmt.Printf("Welcome, %s\n", user.Username)
-	fmt.Printf("Token: %s", token)
+	fmt.Printf("Token: %s\n", token)
 	fmt.Printf("Expires: %s\n", time.Now().UTC().Add(5*time.Minute).Format(time.RFC1123))
 
 	return nil

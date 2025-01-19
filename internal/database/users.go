@@ -30,7 +30,12 @@ func (c Client) CreateUser(params CreateUserParams) error {
 	VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
 	`
 
-	if _, err := c.db.Exec(query, id, params.Username, params.Password); err != nil {
+	if _, err := c.db.Exec(
+		query,
+		id,
+		params.Username,
+		params.Password,
+	); err != nil {
 		return fmt.Errorf("failed to create user: %v", err)
 	}
 
@@ -52,7 +57,7 @@ func (c Client) GetUserByUsername(username string) (User, error) {
 		&user.UpdatedAt,
 		&user.Password); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return User{}, fmt.Errorf("no users with that username")
+			return User{}, fmt.Errorf("no users with that username: %v", err)
 		}
 		return User{}, err
 	}

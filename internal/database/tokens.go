@@ -29,7 +29,12 @@ func (c Client) CreateToken(params CreateTokenParams) error {
 	VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?)
 	`
 
-	if _, err := c.db.Exec(query, params.Token, params.UserID, params.ExpiresAt); err != nil {
+	if _, err := c.db.Exec(
+		query,
+		params.Token,
+		params.UserID,
+		params.ExpiresAt,
+	); err != nil {
 		return fmt.Errorf("failed to create token: %v", err)
 	}
 
@@ -54,9 +59,9 @@ func (c Client) GetToken(userID uuid.UUID) (Token, error) {
 		&token.ExpiresAt,
 	); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return Token{}, fmt.Errorf("invalid token")
+			return Token{}, err
 		}
-		return Token{}, fmt.Errorf("error getting token: %v", err)
+		return Token{}, err
 	}
 
 	return token, nil
