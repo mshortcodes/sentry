@@ -20,11 +20,11 @@ func CheckPasswordHash(password, hash string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 }
 
-func GenerateAPIKey() (string, error) {
-	key := make([]byte, 16)
-	if _, err := rand.Read(key); err != nil {
-		return "", fmt.Errorf("error generating API key: %v", err)
+func GenerateToken() (string, error) {
+	token := make([]byte, 16)
+	if _, err := rand.Read(token); err != nil {
+		return "", fmt.Errorf("error generating token: %v", err)
 	}
 
-	return fmt.Sprintf("%x", key), nil
+	return fmt.Sprintf("%x", token), nil
 }

@@ -41,20 +41,19 @@ func (c *Client) migrate() error {
 		return fmt.Errorf("failed to create users table: %v", err)
 	}
 
-	apiKeys := `
-	CREATE TABLE IF NOT EXISTS api_keys (
-		api_key TEXT PRIMARY KEY,
+	tokens := `
+	CREATE TABLE IF NOT EXISTS tokens (
+		token TEXT PRIMARY KEY,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		user_id TEXT NOT NULL,
-		expires_at TIMESTAMP NOT NULL,
-		FOREIGN KEY(user_id) REFERENCES users(id);
-	)
+		expires_at TIMESTAMP NOT NULL
+	);
 	`
 
-	_, err = c.db.Exec(apiKeys)
+	_, err = c.db.Exec(tokens)
 	if err != nil {
-		return fmt.Errorf("failed to create api_keys table: %v", err)
+		return fmt.Errorf("failed to create tokens table: %v", err)
 	}
 
 	return nil
@@ -65,8 +64,8 @@ func (c *Client) Reset() error {
 		return fmt.Errorf("failed to reset users table: %v", err)
 	}
 
-	if _, err := c.db.Exec("DELETE FROM api_keys"); err != nil {
-		return fmt.Errorf("failed to reset api_keys table: %v", err)
+	if _, err := c.db.Exec("DELETE FROM tokens"); err != nil {
+		return fmt.Errorf("failed to reset tokens table: %v", err)
 	}
 
 	return nil

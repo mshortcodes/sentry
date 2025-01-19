@@ -3,8 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/mshortcodes/sentry/internal/auth"
+	"github.com/mshortcodes/sentry/internal/database"
 )
 
 func handlerLogin(s *state, args []string) error {
@@ -24,12 +26,25 @@ func handlerLogin(s *state, args []string) error {
 		return fmt.Errorf("incorrect password: %v", err)
 	}
 
-	apiKey, err := auth.GenerateAPIKey()
+	token, err := auth.GenerateToken()
 	if err != nil {
-		return fmt.Errorf("error generating API key: %v", err)
+		return fmt.Errorf("error generating token: %v", err)
+	}
+
+	dbToken, err := s.db.GetToken(user.Id)
+	fmt.Printf("%+v", dbToken)
+
+	if err = s.db.CreateToken(database.CreateTokenParams{
+		Token:     token,
+		UserID:    user.Id,
+		ExpiresAt: time.Now().UTC().Add(5 * time.Minute),
+	}); err != nil {
+		return fmt.Errorf("couldn't create session: %v", err)
 	}
 
 	fmt.Printf("Welcome, %s\n", user.Username)
-	fmt.Printf("API key: %s", apiKey)
+	fmt.Printf("Token: %s", token)
+	fmt.Printf("Expires: %s\n", time.Now().UTC().Add(5*time.Minute).Format(time.RFC1123))
+
 	return nil
 }
