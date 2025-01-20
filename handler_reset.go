@@ -4,7 +4,9 @@ import "fmt"
 
 func handlerReset(s *state, args []string) error {
 	fmt.Println("resetting db...")
-	s.db.Reset()
+	if err := s.db.Reset(); err != nil {
+		return fmt.Errorf("failed to reset db: %v", err)
+	}
 
 	return nil
 }

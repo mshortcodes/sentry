@@ -14,7 +14,7 @@ func handlerPasswordsAdd(s *state, args []string) error {
 
 	dbToken, err := validateToken(s)
 	if err != nil {
-		return fmt.Errorf("couldn't validate token: %v", err)
+		return fmt.Errorf("must be logged in: %v", err)
 	}
 
 	name := args[1]

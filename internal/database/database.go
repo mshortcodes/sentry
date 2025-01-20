@@ -28,7 +28,7 @@ func NewClient(dbPath string) (Client, error) {
 func (c *Client) migrate() error {
 	_, err := c.db.Exec("PRAGMA foreign_keys = ON")
 	if err != nil {
-		return fmt.Errorf("failed to enable foreign keys")
+		return fmt.Errorf("failed to enable foreign keys: %v", err)
 	}
 
 	usersTable := `
@@ -56,12 +56,12 @@ func (c *Client) migrate() error {
 		user_id TEXT NOT NULL,
 		UNIQUE(user_id, name),
 		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-	)
+	);
 	`
 
 	_, err = c.db.Exec(passwords)
 	if err != nil {
-		return fmt.Errorf("failed to created passwords table")
+		return fmt.Errorf("failed to create passwords table")
 	}
 
 	tokens := `
