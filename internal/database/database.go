@@ -33,7 +33,7 @@ func (c *Client) migrate() error {
 
 	usersTable := `
 	CREATE TABLE IF NOT EXISTS users (
-		id TEXT PRIMARY KEY,
+		id INTEGER PRIMARY KEY,
 		username TEXT NOT NULL UNIQUE,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,12 +48,12 @@ func (c *Client) migrate() error {
 
 	passwords := `
 	CREATE TABLE IF NOT EXISTS passwords (
-		id TEXT PRIMARY KEY,
+		id INTEGER PRIMARY KEY,
 		name TEXT NOT NULL,
 		password TEXT NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		user_id TEXT NOT NULL,
+		user_id INTEGER NOT NULL,
 		UNIQUE(user_id, name),
 		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
@@ -69,7 +69,7 @@ func (c *Client) migrate() error {
 		token TEXT PRIMARY KEY,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		user_id TEXT NOT NULL,
+		user_id INTEGER NOT NULL,
 		expires_at TIMESTAMP NOT NULL,
 		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);

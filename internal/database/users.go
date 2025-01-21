@@ -5,12 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type User struct {
-	Id        uuid.UUID
+	Id        int
 	Username  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -23,16 +21,13 @@ type CreateUserParams struct {
 }
 
 func (c Client) CreateUser(params CreateUserParams) error {
-	id := uuid.New()
-
 	query := `
-	INSERT INTO users (id, username, created_at, updated_at, password)
-	VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+	INSERT INTO users (username, created_at, updated_at, password)
+	VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
 	`
 
 	if _, err := c.db.Exec(
 		query,
-		id,
 		params.Username,
 		params.Password,
 	); err != nil {

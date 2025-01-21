@@ -5,21 +5,19 @@ import (
 	"errors"
 	"fmt"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Token struct {
 	Token     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	UserID    uuid.UUID
+	UserID    int
 	ExpiresAt time.Time
 }
 
 type CreateTokenParams struct {
 	Token     string
-	UserID    uuid.UUID
+	UserID    int
 	ExpiresAt time.Time
 }
 

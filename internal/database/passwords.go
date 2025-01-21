@@ -3,36 +3,31 @@ package database
 import (
 	"fmt"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Password struct {
-	Id        uuid.UUID
+	Id        int
 	Name      string
 	Password  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	UserID    uuid.UUID
+	UserID    int
 }
 
 type AddPasswordParams struct {
 	Name     string
 	Password string
-	UserID   uuid.UUID
+	UserID   int
 }
 
 func (c Client) AddPassword(params AddPasswordParams) error {
-	id := uuid.New()
-
 	query := `
-	INSERT INTO passwords (id, name, password, created_at, updated_at, user_id)
-	VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+	INSERT INTO passwords (name, password, created_at, updated_at, user_id)
+	VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
 	`
 
 	if _, err := c.db.Exec(
 		query,
-		id.String(),
 		params.Name,
 		params.Password,
 		params.UserID,
@@ -43,7 +38,7 @@ func (c Client) AddPassword(params AddPasswordParams) error {
 	return nil
 }
 
-func (c Client) GetPasswords(userID uuid.UUID) error {
+func (c Client) GetPasswords(userID int) error {
 	query := `
 	SELECT name, password
 	FROM passwords
