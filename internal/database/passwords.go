@@ -38,7 +38,7 @@ func (c Client) AddPassword(params AddPasswordParams) error {
 	return nil
 }
 
-func (c Client) GetPasswords(userID int) error {
+func (c Client) GetPasswords(userID int) ([]Password, error) {
 	query := `
 	SELECT name, password
 	FROM passwords
@@ -48,20 +48,20 @@ func (c Client) GetPasswords(userID int) error {
 
 	rows, err := c.db.Query(query, userID)
 	if err != nil {
-		return fmt.Errorf("failed to get passwords: %v", err)
+		return []Password{}, fmt.Errorf("failed to get passwords: %v", err)
 	}
 	defer rows.Close()
 
-	for rows.Next() {
-		var name string
-		var password string
+	var passwords []Password
 
-		if err := rows.Scan(&name, &password); err != nil {
-			return err
+	for rows.Next() {
+		password := Password{}
+		if err := rows.Scan(&password.Name, &password.Password); err != nil {
+			return []Password{}, err
 		}
 
-		fmt.Printf("%s: %s\n", name, password)
+		passwords = append(passwords, password)
 	}
 
-	return nil
+	return passwords, nil
 }

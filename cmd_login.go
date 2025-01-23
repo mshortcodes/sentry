@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"time"
 
@@ -9,15 +10,31 @@ import (
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
-func handlerLogin(s *state, args []string) error {
-	if len(args) < 3 {
-		return errors.New("must enter username and password")
+func cmdLogin() command {
+	cmd := command{
+		name:        "login",
+		description: "Logs a user in",
+		callback:    handlerLogin,
+		flags:       flag.NewFlagSet("login", flag.ExitOnError),
 	}
 
-	username := args[1]
-	password := args[2]
+	cmd.flags.String("user", "", "username")
+	cmd.flags.String("password", "", "password")
+	return cmd
+}
 
-	user, err := s.db.GetUserByUsername(username)
+func handlerLogin(db database.Client, flags *flag.FlagSet) error {
+	username := flags.Lookup("user").Value.String()
+	if username == "" {
+		return errors.New("usage: --user=name")
+	}
+
+	password := flags.Lookup("password").Value.String()
+	if password == "" {
+		return errors.New("usage: --password=password")
+	}
+
+	user, err := db.GetUserByUsername(username)
 	if err != nil {
 		return fmt.Errorf("couldn't get user: %v", err)
 	}
@@ -31,7 +48,7 @@ func handlerLogin(s *state, args []string) error {
 		return fmt.Errorf("error generating token: %v", err)
 	}
 
-	if err = s.db.CreateToken(database.CreateTokenParams{
+	if err = db.CreateToken(database.CreateTokenParams{
 		Token:     token,
 		UserID:    user.Id,
 		ExpiresAt: time.Now().UTC().Add(5 * time.Minute),

@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 
+	"github.com/mshortcodes/sentry/internal/database"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,4 +28,13 @@ func GenerateToken() (string, error) {
 	}
 
 	return fmt.Sprintf("%x", token), nil
+}
+
+func ValidateToken(db database.Client) (database.Token, error) {
+	dbToken, err := db.GetToken()
+	if err != nil {
+		return database.Token{}, fmt.Errorf("invalid token")
+	}
+
+	return dbToken, nil
 }

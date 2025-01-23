@@ -8,11 +8,6 @@ import (
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
-type state struct {
-	db          database.Client
-	currentUser string
-}
-
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("couldn't load .env file: %v", err)
@@ -28,25 +23,22 @@ func main() {
 		log.Fatalf("couldn't connect to database: %v", err)
 	}
 
-	state := &state{
-		db: db,
-	}
-
 	cmds := make(commands)
-	cmds.add("hello", handlerHello)
-	cmds.add("register", handlerUsersCreate)
-	cmds.add("login", handlerLogin)
-	cmds.add("add", handlerPasswordsAdd)
-	cmds.add("get", handlerPasswordsGet)
-	cmds.add("reset", handlerReset)
+	cmds.add("hello", cmdHello())
+	cmds.add("register", cmdRegister())
+	cmds.add("login", cmdLogin())
+	cmds.add("add", cmdAdd())
+	cmds.add("get", cmdGet())
+	cmds.add("reset", cmdReset())
 
 	if len(os.Args) < 2 {
 		log.Fatal("a command is required")
 	}
 
-	args := os.Args[1:]
+	cmd := os.Args[1]
+	flags := os.Args[2:]
 
-	err = cmds.run(args[0], state, args)
+	err = cmds.run(cmd, flags, db)
 	if err != nil {
 		log.Fatalf("error with args: %v", err)
 	}
