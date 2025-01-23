@@ -18,18 +18,18 @@ func cmdLogin() command {
 		flags:       flag.NewFlagSet("login", flag.ExitOnError),
 	}
 
-	cmd.flags.String("user", "", "username")
-	cmd.flags.String("password", "", "password")
+	cmd.flags.String("u", "", "[u]sername")
+	cmd.flags.String("p", "", "[p]assword")
 	return cmd
 }
 
 func handlerLogin(db database.Client, flags *flag.FlagSet) error {
-	username := flags.Lookup("user").Value.String()
+	username := flags.Lookup("u").Value.String()
 	if username == "" {
 		return errors.New("username can't be empty")
 	}
 
-	password := flags.Lookup("password").Value.String()
+	password := flags.Lookup("p").Value.String()
 	if password == "" {
 		return errors.New("password can't be empty")
 	}

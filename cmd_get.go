@@ -16,7 +16,7 @@ func cmdGet() command {
 		flags:       flag.NewFlagSet("get", flag.ExitOnError),
 	}
 
-	cmd.flags.String("name", "", "password name")
+	cmd.flags.String("n", "", "(Optional) Specify password [n]ame")
 	return cmd
 }
 
@@ -36,7 +36,13 @@ func handlerGet(db database.Client, flags *flag.FlagSet) error {
 		return nil
 	}
 
+	pwName := flags.Lookup("n").Value.String()
+
 	for _, dbPassword := range dbPasswords {
+		if pwName != "" && dbPassword.Name != pwName {
+			continue
+		}
+
 		fmt.Printf("%s: %s\n", dbPassword.Name, dbPassword.Password)
 	}
 

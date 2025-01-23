@@ -17,18 +17,18 @@ func cmdAdd() command {
 		flags:       flag.NewFlagSet("add", flag.ExitOnError),
 	}
 
-	cmd.flags.String("name", "", "password name")
-	cmd.flags.String("password", "", "password")
+	cmd.flags.String("n", "", "password [n]ame")
+	cmd.flags.String("p", "", "[p]assword")
 	return cmd
 }
 
 func handlerAdd(db database.Client, flags *flag.FlagSet) error {
-	name := flags.Lookup("name").Value.String()
-	if name == "" {
+	pwName := flags.Lookup("n").Value.String()
+	if pwName == "" {
 		return errors.New("password name can't be empty")
 	}
 
-	password := flags.Lookup("password").Value.String()
+	password := flags.Lookup("p").Value.String()
 	if len(password) < 8 {
 		return errors.New("password must be at least 8 chars")
 	}
@@ -39,7 +39,7 @@ func handlerAdd(db database.Client, flags *flag.FlagSet) error {
 	}
 
 	err = db.AddPassword(database.AddPasswordParams{
-		Name:     name,
+		Name:     pwName,
 		Password: password,
 		UserID:   dbToken.UserID,
 	})

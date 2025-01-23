@@ -15,19 +15,21 @@ func cmdReset() command {
 		flags:       flag.NewFlagSet("reset", flag.ExitOnError),
 	}
 
-	cmd.flags.Bool("f", false, "force reset the database")
+	cmd.flags.Bool("c", false, "[c]onfirm resetting the database")
 	return cmd
 }
 
 func handlerReset(db database.Client, flags *flag.FlagSet) error {
-	if flags.Lookup("f").Value.String() != "true" {
-		fmt.Println("must provide the force flag")
+	if flags.Lookup("c").Value.String() != "true" {
+		fmt.Println("must provide the confirm flag")
 		return nil
 	}
 
-	fmt.Println("resetting db...")
+	fmt.Println("Resetting the database...")
 	if err := db.Reset(); err != nil {
 		return fmt.Errorf("failed to reset db: %v", err)
 	}
+
+	fmt.Println("Database has been reset!")
 	return nil
 }

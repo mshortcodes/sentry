@@ -24,8 +24,7 @@ func main() {
 	}
 
 	cmds := make(commands)
-	cmds.add("hello", cmdHello())
-	cmds.add("register", cmdRegister())
+	cmds.add("create", cmdCreate())
 	cmds.add("login", cmdLogin())
 	cmds.add("add", cmdAdd())
 	cmds.add("get", cmdGet())
