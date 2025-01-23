@@ -23,7 +23,7 @@ func cmdLogin() command {
 	return cmd
 }
 
-func handlerLogin(db database.Client, flags *flag.FlagSet) error {
+func handlerLogin(db database.Client, flags *flag.FlagSet, cmds commands) error {
 	username := flags.Lookup("u").Value.String()
 	if username == "" {
 		return errors.New("username can't be empty")

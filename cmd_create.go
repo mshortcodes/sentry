@@ -22,7 +22,7 @@ func cmdCreate() command {
 	return cmd
 }
 
-func handlerCreate(db database.Client, flags *flag.FlagSet) error {
+func handlerCreate(db database.Client, flags *flag.FlagSet, cmds commands) error {
 	username := flags.Lookup("u").Value.String()
 	if username == "" {
 		return errors.New("must enter a username")

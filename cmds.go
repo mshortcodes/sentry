@@ -8,7 +8,7 @@ import (
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
-type handler func(db database.Client, flags *flag.FlagSet) error
+type handler func(db database.Client, flags *flag.FlagSet, cmds commands) error
 
 type commands map[string]command
 
@@ -39,7 +39,7 @@ func (c commands) run(name string, flags []string, db database.Client) error {
 		return fmt.Errorf("couldn't parse flags: %v", err)
 	}
 
-	if err := cmd.callback(db, cmd.flags); err != nil {
+	if err := cmd.callback(db, cmd.flags, c); err != nil {
 		return fmt.Errorf("error running command: %v", err)
 	}
 

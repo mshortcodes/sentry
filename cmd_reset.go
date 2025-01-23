@@ -19,7 +19,7 @@ func cmdReset() command {
 	return cmd
 }
 
-func handlerReset(db database.Client, flags *flag.FlagSet) error {
+func handlerReset(db database.Client, flags *flag.FlagSet, cmds commands) error {
 	if flags.Lookup("c").Value.String() != "true" {
 		fmt.Println("must provide the confirm flag")
 		return nil

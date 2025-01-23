@@ -20,7 +20,7 @@ func cmdGet() command {
 	return cmd
 }
 
-func handlerGet(db database.Client, flags *flag.FlagSet) error {
+func handlerGet(db database.Client, flags *flag.FlagSet, cmds commands) error {
 	dbToken, err := auth.ValidateToken(db)
 	if err != nil {
 		return fmt.Errorf("must be logged in: %v", err)

@@ -22,7 +22,7 @@ func cmdAdd() command {
 	return cmd
 }
 
-func handlerAdd(db database.Client, flags *flag.FlagSet) error {
+func handlerAdd(db database.Client, flags *flag.FlagSet, cmds commands) error {
 	pwName := flags.Lookup("n").Value.String()
 	if pwName == "" {
 		return errors.New("password name can't be empty")
