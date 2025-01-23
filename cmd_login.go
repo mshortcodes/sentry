@@ -26,12 +26,12 @@ func cmdLogin() command {
 func handlerLogin(db database.Client, flags *flag.FlagSet) error {
 	username := flags.Lookup("user").Value.String()
 	if username == "" {
-		return errors.New("usage: --user=name")
+		return errors.New("username can't be empty")
 	}
 
 	password := flags.Lookup("password").Value.String()
 	if password == "" {
-		return errors.New("usage: --password=password")
+		return errors.New("password can't be empty")
 	}
 
 	user, err := db.GetUserByUsername(username)
