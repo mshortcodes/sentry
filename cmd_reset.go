@@ -10,7 +10,7 @@ import (
 func cmdReset() command {
 	cmd := command{
 		name:        "reset",
-		description: "Resets the database",
+		description: "resets the database",
 		callback:    handlerReset,
 		flags:       flag.NewFlagSet("reset", flag.ExitOnError),
 	}

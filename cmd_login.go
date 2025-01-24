@@ -13,7 +13,7 @@ import (
 func cmdLogin() command {
 	cmd := command{
 		name:        "login",
-		description: "Logs a user in",
+		description: "logs a user in",
 		callback:    handlerLogin,
 		flags:       flag.NewFlagSet("login", flag.ExitOnError),
 	}

@@ -12,7 +12,7 @@ import (
 func cmdAdd() command {
 	cmd := command{
 		name:        "add",
-		description: "Adds a new password",
+		description: "adds a new password",
 		callback:    handlerAdd,
 		flags:       flag.NewFlagSet("add", flag.ExitOnError),
 	}

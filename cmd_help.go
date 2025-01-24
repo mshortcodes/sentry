@@ -13,7 +13,7 @@ import (
 func cmdHelp() command {
 	cmd := command{
 		name:        "help",
-		description: "Adds a new password",
+		description: "lists available commands",
 		callback:    handlerHelp,
 		flags:       flag.NewFlagSet("help", flag.ExitOnError),
 	}
@@ -36,6 +36,15 @@ func handlerHelp(db database.Client, flags *flag.FlagSet, cmds commands) error {
 	}
 
 	slices.Sort(keys)
+
+	fmt.Println("Syntax:")
+	fmt.Printf("  [CMD] [FLAG] [VALUE]\n")
+	fmt.Println("  'help -h'")
+	fmt.Println("  'add -n phone -p 12345678'")
+	fmt.Println("  Run [CMD] -h to view its flags")
+	fmt.Println()
+	fmt.Println(separator)
+	fmt.Println()
 
 	for _, key := range keys {
 		fmt.Println("Name:")

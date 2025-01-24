@@ -12,7 +12,7 @@ import (
 func cmdCreate() command {
 	cmd := command{
 		name:        "create",
-		description: "Creates a new user",
+		description: "creates a new user",
 		callback:    handlerCreate,
 		flags:       flag.NewFlagSet("create", flag.ExitOnError),
 	}
