@@ -12,6 +12,8 @@ type Password struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	UserID    int
+	Salt      string
+	Nonce     string
 }
 
 type AddPasswordParams struct {

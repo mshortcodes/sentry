@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mshortcodes/sentry/internal/auth"
+	"github.com/mshortcodes/sentry/internal/crypt"
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
