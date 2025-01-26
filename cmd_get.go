@@ -1,32 +1,16 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-
-	"github.com/mshortcodes/sentry/internal/auth"
-	"github.com/mshortcodes/sentry/internal/database"
 )
 
-func cmdGet() command {
-	cmd := command{
-		name:        "get",
-		description: "retrieves passwords",
-		callback:    handlerGet,
-		flags:       flag.NewFlagSet("get", flag.ExitOnError),
-	}
-
-	cmd.flags.String("n", "", "(Optional) Specify password [n]ame")
-	return cmd
-}
-
-func handlerGet(db database.Client, flags *flag.FlagSet, cmds commands) error {
-	dbToken, err := auth.ValidateToken(db)
+func cmdGet(s *state) error {
+	err := validateUser(s)
 	if err != nil {
-		return fmt.Errorf("must be logged in: %v", err)
+		return err
 	}
 
-	dbPasswords, err := db.GetPasswords(dbToken.UserID)
+	dbPasswords, err := s.db.GetPasswords(s.user.Id)
 	if err != nil {
 		return fmt.Errorf("couldn't get passwords: %v", err)
 	}
@@ -36,14 +20,26 @@ func handlerGet(db database.Client, flags *flag.FlagSet, cmds commands) error {
 		return nil
 	}
 
-	pwName := flags.Lookup("n").Value.String()
+	dbPasswordsCache := make(map[string]string)
 
 	for _, dbPassword := range dbPasswords {
-		if pwName != "" && dbPassword.Name != pwName {
+		fmt.Printf("\t%s\n", dbPassword.Name)
+		dbPasswordsCache[dbPassword.Name] = dbPassword.Password
+	}
+
+	for {
+		fmt.Print("\tpassword name: ")
+		s.scanner.Scan()
+		pwName := s.scanner.Text()
+
+		pw, ok := dbPasswordsCache[pwName]
+		if !ok {
+			fmt.Println("\tinvalid password name")
 			continue
 		}
 
-		fmt.Printf("%s: %s\n", dbPassword.Name, dbPassword.Password)
+		fmt.Printf("%s\n", pw)
+		break
 	}
 
 	return nil

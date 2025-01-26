@@ -1,12 +1,20 @@
 package main
 
 import (
+	"bufio"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/mshortcodes/sentry/internal/database"
 )
+
+type state struct {
+	db       *database.Client
+	user     *database.User
+	password string
+	scanner  *bufio.Scanner
+}
 
 func main() {
 	if err := godotenv.Load(); err != nil {
@@ -23,23 +31,12 @@ func main() {
 		log.Fatalf("couldn't connect to database: %v", err)
 	}
 
-	cmds := make(commands)
-	cmds.add("help", cmdHelp())
-	cmds.add("create", cmdCreate())
-	cmds.add("login", cmdLogin())
-	cmds.add("add", cmdAdd())
-	cmds.add("get", cmdGet())
-	cmds.add("reset", cmdReset())
+	scanner := bufio.NewScanner(os.Stdin)
 
-	if len(os.Args) < 2 {
-		log.Fatal("a command is required")
+	state := state{
+		db:      &db,
+		scanner: scanner,
 	}
 
-	cmd := os.Args[1]
-	flags := os.Args[2:]
-
-	err = cmds.run(cmd, flags, db)
-	if err != nil {
-		log.Fatalf("error with args: %v", err)
-	}
+	repl(&state)
 }

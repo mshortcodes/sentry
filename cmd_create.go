@@ -2,33 +2,23 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 
 	"github.com/mshortcodes/sentry/internal/auth"
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
-func cmdCreate() command {
-	cmd := command{
-		name:        "create",
-		description: "creates a new user",
-		callback:    handlerCreate,
-		flags:       flag.NewFlagSet("create", flag.ExitOnError),
-	}
-
-	cmd.flags.String("u", "", "[u]sername")
-	cmd.flags.String("p", "", "[p]assword")
-	return cmd
-}
-
-func handlerCreate(db database.Client, flags *flag.FlagSet, cmds commands) error {
-	username := flags.Lookup("u").Value.String()
+func cmdCreate(s *state) error {
+	fmt.Print("username: ")
+	s.scanner.Scan()
+	username := s.scanner.Text()
 	if username == "" {
 		return errors.New("must enter a username")
 	}
 
-	password := flags.Lookup("p").Value.String()
+	fmt.Print("password: ")
+	s.scanner.Scan()
+	password := s.scanner.Text()
 	if len(password) < 8 {
 		return errors.New("password must be at least 8 chars")
 	}
@@ -38,7 +28,7 @@ func handlerCreate(db database.Client, flags *flag.FlagSet, cmds commands) error
 		return fmt.Errorf("couldn't hash password: %v", err)
 	}
 
-	err = db.CreateUser(database.CreateUserParams{
+	err = s.db.CreateUser(database.CreateUserParams{
 		Username: username,
 		Password: hash,
 	})

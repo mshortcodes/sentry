@@ -64,22 +64,6 @@ func (c *Client) migrate() error {
 		return fmt.Errorf("failed to create passwords table")
 	}
 
-	tokens := `
-	CREATE TABLE IF NOT EXISTS tokens (
-		token TEXT PRIMARY KEY,
-		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		user_id INTEGER NOT NULL,
-		expires_at TIMESTAMP NOT NULL,
-		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-	);
-	`
-
-	_, err = c.db.Exec(tokens)
-	if err != nil {
-		return fmt.Errorf("failed to create tokens table: %v", err)
-	}
-
 	return nil
 }
 

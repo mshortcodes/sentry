@@ -1,47 +1,44 @@
 package main
 
-import (
-	"errors"
-	"flag"
-	"fmt"
+type cmds map[string]cmd
 
-	"github.com/mshortcodes/sentry/internal/database"
-)
-
-type handler func(db database.Client, flags *flag.FlagSet, cmds commands) error
-
-type commands map[string]command
-
-type command struct {
+type cmd struct {
 	name        string
 	description string
-	callback    handler
-	flags       *flag.FlagSet
+	callback    func(*state) error
 }
 
-func (c commands) add(name string, cmd command) error {
-	_, ok := c[name]
-	if ok {
-		return errors.New("command already exists")
+func getCmds() cmds {
+	return cmds{
+		"help": {
+			name:        "help",
+			description: "lists available commands",
+			callback:    cmdHelp,
+		},
+		"add": {
+			name:        "add",
+			description: "adds a new password",
+			callback:    cmdAdd,
+		},
+		"create": {
+			name:        "create",
+			description: "creates a new user",
+			callback:    cmdCreate,
+		},
+		"get": {
+			name:        "get",
+			description: "retrieves passwords",
+			callback:    cmdGet,
+		},
+		"login": {
+			name:        "login",
+			description: "logs a user in",
+			callback:    cmdLogin,
+		},
+		"reset": {
+			name:        "reset",
+			description: "resets the database",
+			callback:    cmdReset,
+		},
 	}
-
-	c[name] = cmd
-	return nil
-}
-
-func (c commands) run(name string, flags []string, db database.Client) error {
-	cmd, ok := c[name]
-	if !ok {
-		return errors.New("command doesn't exist")
-	}
-
-	if err := cmd.flags.Parse(flags); err != nil {
-		return fmt.Errorf("couldn't parse flags: %v", err)
-	}
-
-	if err := cmd.callback(db, cmd.flags, c); err != nil {
-		return fmt.Errorf("error running command: %v", err)
-	}
-
-	return nil
 }

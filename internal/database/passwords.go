@@ -50,7 +50,7 @@ func (c Client) GetPasswords(userID int) ([]Password, error) {
 
 	rows, err := c.db.Query(query, userID)
 	if err != nil {
-		return []Password{}, fmt.Errorf("failed to get passwords: %v", err)
+		return nil, fmt.Errorf("failed to get passwords: %v", err)
 	}
 	defer rows.Close()
 
@@ -59,7 +59,7 @@ func (c Client) GetPasswords(userID int) ([]Password, error) {
 	for rows.Next() {
 		password := Password{}
 		if err := rows.Scan(&password.Name, &password.Password); err != nil {
-			return []Password{}, err
+			return nil, err
 		}
 
 		passwords = append(passwords, password)
