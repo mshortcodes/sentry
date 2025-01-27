@@ -9,14 +9,15 @@ import (
 )
 
 func cmdCreate(s *state) error {
-	fmt.Print("username: ")
+	fmt.Print("\tusername: ")
 	s.scanner.Scan()
 	username := s.scanner.Text()
+	username = validateInput(username)
 	if username == "" {
 		return errors.New("must enter a username")
 	}
 
-	fmt.Print("password: ")
+	fmt.Print("\tpassword: ")
 	s.scanner.Scan()
 	password := s.scanner.Text()
 	if len(password) < 8 {
@@ -36,7 +37,7 @@ func cmdCreate(s *state) error {
 		return fmt.Errorf("couldn't create user: %v", err)
 	}
 
-	fmt.Printf("%s has been created. Login to add passwords.\n", username)
+	fmt.Printf("\t%s has been created. Login to add passwords.\n\n", username)
 
 	return nil
 }

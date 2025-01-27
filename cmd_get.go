@@ -16,7 +16,7 @@ func cmdGet(s *state) error {
 	}
 
 	if len(dbPasswords) == 0 {
-		fmt.Println("no saved passwords")
+		fmt.Print("\tno saved passwords\n\n")
 		return nil
 	}
 
@@ -38,7 +38,7 @@ func cmdGet(s *state) error {
 			continue
 		}
 
-		fmt.Printf("%s\n", pw)
+		fmt.Printf("\t%s\n\n", pw)
 		break
 	}
 

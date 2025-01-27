@@ -10,11 +10,6 @@ type cmd struct {
 
 func getCmds() cmds {
 	return cmds{
-		"help": {
-			name:        "help",
-			description: "lists available commands",
-			callback:    cmdHelp,
-		},
 		"add": {
 			name:        "add",
 			description: "adds a new password",
@@ -29,6 +24,11 @@ func getCmds() cmds {
 			name:        "get",
 			description: "retrieves passwords",
 			callback:    cmdGet,
+		},
+		"help": {
+			name:        "help",
+			description: "lists available commands",
+			callback:    cmdHelp,
 		},
 		"login": {
 			name:        "login",

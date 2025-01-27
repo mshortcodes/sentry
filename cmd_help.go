@@ -19,5 +19,7 @@ func cmdHelp(s *state) error {
 		fmt.Printf("\t%s - %s\n", cmds[key].name, cmds[key].description)
 	}
 
+	fmt.Println()
+
 	return nil
 }

@@ -16,6 +16,7 @@ func cmdAdd(s *state) error {
 	fmt.Print("\tpassword name: ")
 	s.scanner.Scan()
 	pwName := s.scanner.Text()
+	pwName = validateInput(pwName)
 	if pwName == "" {
 		return errors.New("must enter a password name")
 	}
@@ -36,5 +37,6 @@ func cmdAdd(s *state) error {
 		return fmt.Errorf("couldn't add password: %v", err)
 	}
 
+	fmt.Print("\tpassword saved\n\n")
 	return nil
 }

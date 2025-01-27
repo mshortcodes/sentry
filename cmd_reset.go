@@ -5,11 +5,11 @@ import (
 )
 
 func cmdReset(s *state) error {
-	fmt.Println("Resetting the database...")
+	fmt.Print("\tResetting the database...\n")
 	if err := s.db.Reset(); err != nil {
 		return fmt.Errorf("failed to reset db: %v", err)
 	}
 
-	fmt.Println("Database has been reset!")
+	fmt.Print("\tDatabase has been reset!\n\n")
 	return nil
 }

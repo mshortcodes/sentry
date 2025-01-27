@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 func repl(s *state) {
@@ -13,12 +12,13 @@ func repl(s *state) {
 		s.scanner.Scan()
 		input := s.scanner.Text()
 
-		inputCmd := cleanInputCmd(input)
-		if inputCmd == "" {
+		cleaned := cleanInput(input)
+		if cleaned == "" {
 			fmt.Printf("\tenter a command\n\n")
+			continue
 		}
 
-		cmd, ok := cmds[inputCmd]
+		cmd, ok := cmds[cleaned]
 		if !ok {
 			fmt.Print("\tinvalid command\n\n")
 			continue
@@ -29,13 +29,4 @@ func repl(s *state) {
 			fmt.Printf("\t%v\n\n", err)
 		}
 	}
-}
-
-func cleanInputCmd(input string) string {
-	lowered := strings.ToLower(input)
-	args := strings.Fields(lowered)
-	if len(args) < 1 {
-		return ""
-	}
-	return args[0]
 }
