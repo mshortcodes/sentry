@@ -35,17 +35,15 @@ func cmdCreate(s *state) error {
 		return fmt.Errorf("couldn't hash password: %v", err)
 	}
 
-	saltBytes, err := crypt.GenerateSalt()
+	salt, err := crypt.GenerateSalt()
 	if err != nil {
 		return fmt.Errorf("couldn't generate salt: %v", err)
 	}
 
-	salt := fmt.Sprintf("%x", saltBytes)
-
 	err = s.db.CreateUser(database.CreateUserParams{
 		Username: username,
 		Password: hash,
-		Salt:     salt,
+		Salt:     fmt.Sprintf("%x", salt),
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create user: %v", err)
