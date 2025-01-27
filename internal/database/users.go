@@ -13,23 +13,26 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Password  string
+	Salt      string
 }
 
 type CreateUserParams struct {
 	Username string
 	Password string
+	Salt     string
 }
 
 func (c Client) CreateUser(params CreateUserParams) error {
 	query := `
-	INSERT INTO users (username, created_at, updated_at, password)
-	VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+	INSERT INTO users (username, created_at, updated_at, password, salt)
+	VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?)
 	`
 
 	if _, err := c.db.Exec(
 		query,
 		params.Username,
 		params.Password,
+		params.Salt,
 	); err != nil {
 		return fmt.Errorf("failed to create user: %v", err)
 	}
@@ -50,7 +53,8 @@ func (c Client) GetUserByUsername(username string) (User, error) {
 		&user.Username,
 		&user.CreatedAt,
 		&user.UpdatedAt,
-		&user.Password); err != nil {
+		&user.Password,
+		&user.Salt); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return User{}, fmt.Errorf("no users with that username: %v", err)
 		}

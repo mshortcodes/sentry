@@ -37,7 +37,8 @@ func (c *Client) migrate() error {
 		username TEXT NOT NULL UNIQUE,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		password TEXT NOT NULL
+		password TEXT NOT NULL,
+		salt TEXT NOT NULL
 	);
 	`
 
@@ -54,6 +55,7 @@ func (c *Client) migrate() error {
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		user_id INTEGER NOT NULL,
+		nonce TEXT NOT NULL,
 		UNIQUE(user_id, name),
 		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
@@ -61,7 +63,7 @@ func (c *Client) migrate() error {
 
 	_, err = c.db.Exec(passwords)
 	if err != nil {
-		return fmt.Errorf("failed to create passwords table")
+		return fmt.Errorf("failed to create passwords table: %v", err)
 	}
 
 	return nil

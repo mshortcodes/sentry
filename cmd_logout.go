@@ -10,5 +10,7 @@ func cmdLogout(s *state) error {
 
 	fmt.Printf("\t%s has been logged out\n\n", s.user.Username)
 	s.user = nil
+	s.password = ""
+	s.key = nil
 	return nil
 }

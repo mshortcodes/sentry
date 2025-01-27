@@ -13,6 +13,7 @@ type state struct {
 	db       *database.Client
 	user     *database.User
 	password string
+	key      []byte
 	scanner  *bufio.Scanner
 }
 

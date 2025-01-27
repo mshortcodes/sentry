@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/mshortcodes/sentry/internal/auth"
+	"github.com/mshortcodes/sentry/internal/crypt"
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
@@ -34,15 +35,22 @@ func cmdCreate(s *state) error {
 		return fmt.Errorf("couldn't hash password: %v", err)
 	}
 
+	saltBytes, err := crypt.GenerateSalt()
+	if err != nil {
+		return fmt.Errorf("couldn't generate salt: %v", err)
+	}
+
+	salt := fmt.Sprintf("%x", saltBytes)
+
 	err = s.db.CreateUser(database.CreateUserParams{
 		Username: username,
 		Password: hash,
+		Salt:     salt,
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create user: %v", err)
 	}
 
 	fmt.Printf("\t%s has been created. Login to add passwords.\n\n", username)
-
 	return nil
 }

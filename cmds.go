@@ -32,7 +32,7 @@ func getCmds() cmds {
 		},
 		"get": {
 			name:        "get",
-			description: "retrieves passwords",
+			description: "gets passwords",
 			callback:    cmdGet,
 		},
 		"help": {

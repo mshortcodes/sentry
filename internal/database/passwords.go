@@ -12,7 +12,6 @@ type Password struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	UserID    int
-	Salt      string
 	Nonce     string
 }
 
@@ -20,12 +19,13 @@ type AddPasswordParams struct {
 	Name     string
 	Password string
 	UserID   int
+	Nonce    string
 }
 
 func (c Client) AddPassword(params AddPasswordParams) error {
 	query := `
-	INSERT INTO passwords (name, password, created_at, updated_at, user_id)
-	VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)
+	INSERT INTO passwords (name, password, created_at, updated_at, user_id, nonce)
+	VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?)
 	`
 
 	if _, err := c.db.Exec(
@@ -33,6 +33,7 @@ func (c Client) AddPassword(params AddPasswordParams) error {
 		params.Name,
 		params.Password,
 		params.UserID,
+		params.Nonce,
 	); err != nil {
 		return fmt.Errorf("failed to add password")
 	}

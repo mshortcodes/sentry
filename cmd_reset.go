@@ -8,6 +8,7 @@ func cmdReset(s *state) error {
 		return fmt.Errorf("failed to reset database: %v", err)
 	}
 	s.user = nil
+	s.password = ""
 	fmt.Print("\tDatabase has been reset!\n\n")
 	return nil
 }
