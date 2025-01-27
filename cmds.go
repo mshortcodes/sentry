@@ -20,6 +20,11 @@ func getCmds() cmds {
 			description: "creates a new user",
 			callback:    cmdCreate,
 		},
+		"exit": {
+			name:        "exit",
+			description: "exits the program",
+			callback:    cmdExit,
+		},
 		"get": {
 			name:        "get",
 			description: "retrieves passwords",
