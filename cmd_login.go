@@ -1,12 +1,18 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/mshortcodes/sentry/internal/auth"
 )
 
 func cmdLogin(s *state) error {
+	isLoggedIn := validateUser(s) == nil
+	if isLoggedIn {
+		return errors.New("must be logged out")
+	}
+
 	fmt.Print("\tusername: ")
 	s.scanner.Scan()
 	username := s.scanner.Text()

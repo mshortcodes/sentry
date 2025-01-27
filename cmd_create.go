@@ -9,6 +9,11 @@ import (
 )
 
 func cmdCreate(s *state) error {
+	isLoggedIn := validateUser(s) == nil
+	if isLoggedIn {
+		return errors.New("must be logged out")
+	}
+
 	fmt.Print("\tusername: ")
 	s.scanner.Scan()
 	username := s.scanner.Text()

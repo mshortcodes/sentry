@@ -45,6 +45,11 @@ func getCmds() cmds {
 			description: "logs a user in",
 			callback:    cmdLogin,
 		},
+		"logout": {
+			name:        "logout",
+			description: "logs a user out",
+			callback:    cmdLogout,
+		},
 		"reset": {
 			name:        "reset",
 			description: "resets the database",
