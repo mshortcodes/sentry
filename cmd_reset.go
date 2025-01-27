@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func cmdReset(s *state) error {
 	fmt.Print("\tResetting the database...\n")

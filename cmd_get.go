@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func cmdGet(s *state) error {
 	err := validateUser(s)
