@@ -67,12 +67,8 @@ func (c *Client) migrate() error {
 	return nil
 }
 
-func (c *Client) Reset(userID int) error {
-	query := `
-	DELETE FROM users
-	WHERE id = ?
-	`
-	if _, err := c.db.Exec(query, userID); err != nil {
+func (c *Client) Reset() error {
+	if _, err := c.db.Exec("DELETE FROM users"); err != nil {
 		return fmt.Errorf("failed to reset the database: %v", err)
 	}
 
