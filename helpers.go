@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -27,4 +28,9 @@ func validateInput(input string) string {
 		return ""
 	}
 	return args[0]
+}
+
+func printWelcomeMessage() {
+	fmt.Print("\tWelcome to Sentry!🛡️\n")
+	fmt.Print("\tType 'help' to view available comands\n\n")
 }
