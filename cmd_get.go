@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"encoding/hex"
+	"fmt"
+
+	"github.com/mshortcodes/sentry/internal/crypt"
+)
 
 func cmdGet(s *state) error {
 	err := validateUser(s)
@@ -22,7 +27,23 @@ func cmdGet(s *state) error {
 
 	for _, dbPassword := range dbPasswords {
 		fmt.Printf("\t%s\n", dbPassword.Name)
-		dbPasswordsCache[dbPassword.Name] = dbPassword.Password
+
+		dbPasswordNonce, err := hex.DecodeString(dbPassword.Nonce)
+		if err != nil {
+			return fmt.Errorf("error decoding nonce: %v", err)
+		}
+
+		ciphertext, err := hex.DecodeString(dbPassword.Password)
+		if err != nil {
+			return fmt.Errorf("error decoding ciphertext: %v", err)
+		}
+
+		plaintext, err := crypt.Decrypt(ciphertext, s.key, dbPasswordNonce)
+		if err != nil {
+			return fmt.Errorf("couldn't decrypt password: %v", err)
+		}
+
+		dbPasswordsCache[dbPassword.Name] = plaintext
 	}
 
 	for {

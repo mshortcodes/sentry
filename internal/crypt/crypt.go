@@ -21,6 +21,25 @@ func Encrypt(plaintext, key, nonce []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
+func Decrypt(ciphertext, key, nonce []byte) (string, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+
+	plaintext, err := aesgcm.Open(nil, nonce, ciphertext, nil)
+	if err != nil {
+		return "", err
+	}
+
+	return string(plaintext), nil
+}
+
 func GenerateNonce() ([]byte, error) {
 	nonce := make([]byte, 12)
 	if _, err := rand.Read(nonce); err != nil {

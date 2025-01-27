@@ -43,7 +43,7 @@ func (c Client) AddPassword(params AddPasswordParams) error {
 
 func (c Client) GetPasswords(userID int) ([]Password, error) {
 	query := `
-	SELECT name, password
+	SELECT name, password, nonce
 	FROM passwords
 	WHERE user_id = ?
 	ORDER BY name ASC
@@ -59,7 +59,7 @@ func (c Client) GetPasswords(userID int) ([]Password, error) {
 
 	for rows.Next() {
 		password := Password{}
-		if err := rows.Scan(&password.Name, &password.Password); err != nil {
+		if err := rows.Scan(&password.Name, &password.Password, &password.Nonce); err != nil {
 			return nil, err
 		}
 
