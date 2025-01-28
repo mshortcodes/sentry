@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
+	"slices"
+	"strconv"
 
 	"github.com/mshortcodes/sentry/internal/crypt"
 )
@@ -11,6 +13,10 @@ func cmdGet(s *state) error {
 	err := validateUser(s)
 	if err != nil {
 		return err
+	}
+
+	if s.cache != nil {
+		return getPassword(s)
 	}
 
 	dbPasswords, err := s.db.GetPasswords(s.user.Id)
@@ -23,11 +29,9 @@ func cmdGet(s *state) error {
 		return nil
 	}
 
-	dbPasswordsCache := make(map[string]string)
+	s.cache = make(map[int]passwordInfo)
 
-	for _, dbPassword := range dbPasswords {
-		fmt.Printf("\t%s\n", dbPassword.Name)
-
+	for i, dbPassword := range dbPasswords {
 		dbPasswordNonce, err := hex.DecodeString(dbPassword.Nonce)
 		if err != nil {
 			return fmt.Errorf("error decoding nonce: %v", err)
@@ -43,23 +47,57 @@ func cmdGet(s *state) error {
 			return fmt.Errorf("couldn't decrypt password: %v", err)
 		}
 
-		dbPasswordsCache[dbPassword.Name] = plaintext
+		s.cache[i+1] = passwordInfo{
+			name:     dbPassword.Name,
+			password: plaintext,
+		}
 	}
 
-	for {
-		fmt.Print("\tpassword name: ")
-		s.scanner.Scan()
-		pwName := s.scanner.Text()
+	return getPassword(s)
+}
 
-		pw, ok := dbPasswordsCache[pwName]
+func getPassword(s *state) error {
+	printPasswords(s)
+	for {
+		pwNumber, err := getPasswordInput(s)
+		if err != nil {
+			return fmt.Errorf("error getting password input: %v", err)
+		}
+
+		pw, ok := s.cache[pwNumber]
 		if !ok {
-			fmt.Println("\tinvalid password name")
+			fmt.Println("\tinvalid number")
 			continue
 		}
 
-		fmt.Printf("\t%s\n\n", pw)
+		fmt.Printf("\t%s\n\n", pw.password)
 		break
 	}
 
 	return nil
+}
+
+func printPasswords(s *state) {
+	keys := make([]int, 0, len(s.cache))
+
+	for key := range s.cache {
+		keys = append(keys, key)
+	}
+
+	slices.Sort(keys)
+
+	for _, key := range keys {
+		fmt.Printf("\t[%d] %s\n", key, s.cache[key].name)
+	}
+}
+
+func getPasswordInput(s *state) (int, error) {
+	fmt.Print("\tnumber: ")
+	s.scanner.Scan()
+	pwNumber, err := strconv.Atoi(s.scanner.Text())
+	if err != nil {
+		return 0, fmt.Errorf("couldn't convert str to int: %v", err)
+	}
+
+	return pwNumber, nil
 }

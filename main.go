@@ -15,6 +15,12 @@ type state struct {
 	password string
 	key      []byte
 	scanner  *bufio.Scanner
+	cache    map[int]passwordInfo
+}
+
+type passwordInfo struct {
+	name     string
+	password string
 }
 
 func main() {
