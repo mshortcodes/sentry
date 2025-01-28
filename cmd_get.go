@@ -57,16 +57,17 @@ func cmdGet(s *state) error {
 }
 
 func getPassword(s *state) error {
-	printPasswords(s)
 	for {
+		printPasswords(s)
 		pwNumber, err := getPasswordInput(s)
 		if err != nil {
-			return fmt.Errorf("error getting password input: %v", err)
+			fmt.Printf("\terror getting password input: %v\n\n", err)
+			continue
 		}
 
 		pw, ok := s.cache[pwNumber]
 		if !ok {
-			fmt.Println("\tinvalid number")
+			fmt.Print("\tinvalid number\n\n")
 			continue
 		}
 
@@ -89,6 +90,8 @@ func printPasswords(s *state) {
 	for _, key := range keys {
 		fmt.Printf("\t[%d] %s\n", key, s.cache[key].name)
 	}
+
+	fmt.Println()
 }
 
 func getPasswordInput(s *state) (int, error) {
@@ -96,7 +99,7 @@ func getPasswordInput(s *state) (int, error) {
 	s.scanner.Scan()
 	pwNumber, err := strconv.Atoi(s.scanner.Text())
 	if err != nil {
-		return 0, fmt.Errorf("couldn't convert str to int: %v", err)
+		return 0, fmt.Errorf("must enter a number: %v", err)
 	}
 
 	return pwNumber, nil
