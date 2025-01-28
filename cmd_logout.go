@@ -12,5 +12,6 @@ func cmdLogout(s *state) error {
 	s.user = nil
 	s.password = ""
 	s.key = nil
+	s.cache = nil
 	return nil
 }
