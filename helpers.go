@@ -30,7 +30,7 @@ func validateInput(input string) string {
 	return args[0]
 }
 
-func printWelcomeMessage() {
+func printWelcomeMsg() {
 	fmt.Print("\tWelcome to Sentry!🛡️\n")
 	fmt.Print("\tType 'help' to view available comands\n\n")
 }

@@ -6,7 +6,7 @@ import (
 
 func repl(s *state) {
 	cmds := getCmds()
-	printWelcomeMessage()
+	printWelcomeMsg()
 
 	for {
 		fmt.Print("sentry > ")
