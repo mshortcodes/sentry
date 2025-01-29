@@ -69,13 +69,13 @@ func (c Client) GetPasswords(userID int) ([]Password, error) {
 	return passwords, nil
 }
 
-func (c *Client) DeletePasswords(userID int) error {
+func (c *Client) WipePasswords(userID int) error {
 	query := `
 	DELETE FROM passwords
-	WHERE id = ?
+	WHERE user_id = ?
 	`
 	if _, err := c.db.Exec(query, userID); err != nil {
-		return fmt.Errorf("failed to delete passwords: %v", err)
+		return fmt.Errorf("failed to wipe passwords: %v", err)
 	}
 
 	return nil

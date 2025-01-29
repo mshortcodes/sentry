@@ -20,11 +20,6 @@ func getCmds() cmds {
 			description: "creates a new user",
 			callback:    cmdCreate,
 		},
-		"delete": {
-			name:        "delete",
-			description: "deletes passwords",
-			callback:    cmdDelete,
-		},
 		"exit": {
 			name:        "exit",
 			description: "exits the program",
@@ -54,6 +49,11 @@ func getCmds() cmds {
 			name:        "reset",
 			description: "resets the database",
 			callback:    cmdReset,
+		},
+		"wipe": {
+			name:        "wipe",
+			description: "wipes all passwords",
+			callback:    cmdWipe,
 		},
 	}
 }
