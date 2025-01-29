@@ -16,7 +16,7 @@ func cmdGet(s *state) error {
 	}
 
 	if s.cache != nil {
-		return getPassword(s)
+		return getPasswordFromCache(s)
 	}
 
 	dbPasswords, err := s.db.GetPasswords(s.user.Id)

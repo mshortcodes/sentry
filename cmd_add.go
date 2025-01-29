@@ -14,19 +14,9 @@ func cmdAdd(s *state) error {
 		return err
 	}
 
-	fmt.Print("\tpassword name: ")
-	s.scanner.Scan()
-	pwName := s.scanner.Text()
-	pwName = validateInput(pwName)
-	if pwName == "" {
-		return errors.New("must enter a password name")
-	}
-
-	fmt.Print("\tpassword: ")
-	s.scanner.Scan()
-	password := s.scanner.Text()
-	if len(password) < 8 {
-		return errors.New("password must be at least 8 chars")
+	pwName, password, err := getPasswordInfo(s)
+	if err != nil {
+		return fmt.Errorf("error getting password info: %v", err)
 	}
 
 	nonce, err := crypt.GenerateNonce()
@@ -51,4 +41,23 @@ func cmdAdd(s *state) error {
 
 	fmt.Print("\tpassword saved\n\n")
 	return nil
+}
+
+func getPasswordInfo(s *state) (string, string, error) {
+	fmt.Print("\tpassword name: ")
+	s.scanner.Scan()
+	pwName := s.scanner.Text()
+	pwName = validateInput(pwName)
+	if pwName == "" {
+		return "", "", errors.New("must enter a password name")
+	}
+
+	fmt.Print("\tpassword: ")
+	s.scanner.Scan()
+	password := s.scanner.Text()
+	if len(password) < 8 {
+		return "", "", errors.New("password must be at least 8 chars")
+	}
+
+	return pwName, password, nil
 }
