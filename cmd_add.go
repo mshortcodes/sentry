@@ -47,9 +47,9 @@ func getPasswordInfo(s *state) (string, string, error) {
 	fmt.Print("\tpassword name: ")
 	s.scanner.Scan()
 	pwName := s.scanner.Text()
-	pwName = validateInput(pwName)
-	if pwName == "" {
-		return "", "", errors.New("must enter a password name")
+	pwName, err := validateInput(pwName)
+	if err != nil {
+		return "", "", fmt.Errorf("error validating input: %v", err)
 	}
 
 	fmt.Print("\tpassword: ")

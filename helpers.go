@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+var (
+	errNoName   = errors.New("must enter a name")
+	errNoSpaces = errors.New("no spaces allowed")
+)
+
 func validateUser(s *state) error {
 	if s.user == nil {
 		return errors.New("must be logged in")
@@ -12,19 +17,23 @@ func validateUser(s *state) error {
 	return nil
 }
 
-func cleanInput(input string) string {
-	lowered := strings.ToLower(input)
-	args := strings.Fields(lowered)
-	if len(args) < 1 {
-		return ""
+func validateInput(input string) (string, error) {
+	args := strings.Fields(input)
+
+	switch {
+	case len(args) < 1:
+		return "", errNoName
+	case len(args) > 1:
+		return "", errNoSpaces
 	}
-	return args[0]
+
+	return args[0], nil
 }
 
-func validateInput(input string) string {
-	args := strings.Fields(input)
-	if len(args) < 1 {
-		return ""
-	}
-	return args[0]
+func clearMemory(s *state) {
+	s.user = nil
+	s.username = ""
+	s.password = ""
+	s.key = nil
+	s.cache = nil
 }

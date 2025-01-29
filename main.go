@@ -12,6 +12,7 @@ import (
 type state struct {
 	db       *database.Client
 	user     *database.User
+	username string
 	password string
 	key      []byte
 	scanner  *bufio.Scanner

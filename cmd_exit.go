@@ -15,7 +15,7 @@ func printGoodbyeMessage(s *state) {
 	fmt.Println("\tExiting Sentry...")
 
 	if s.user != nil {
-		fmt.Printf("\tGoodbye, %s!\n\n", s.user.Username)
+		fmt.Printf("\tGoodbye, %s!\n\n", s.username)
 		return
 	}
 

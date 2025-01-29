@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/mshortcodes/sentry/internal/auth"
 	"github.com/mshortcodes/sentry/internal/crypt"
@@ -31,7 +32,7 @@ func cmdCreate(s *state) error {
 	}
 
 	err = s.db.CreateUser(database.CreateUserParams{
-		Username: username,
+		Username: strings.ToLower(username),
 		Password: hash,
 		Salt:     fmt.Sprintf("%x", salt),
 	})
@@ -47,9 +48,9 @@ func getCreateInfo(s *state) (string, string, error) {
 	fmt.Print("\tusername: ")
 	s.scanner.Scan()
 	username := s.scanner.Text()
-	username = validateInput(username)
-	if username == "" {
-		return "", "", errors.New("must enter a username")
+	username, err := validateInput(username)
+	if err != nil {
+		return "", "", fmt.Errorf("error validating input: %v", err)
 	}
 
 	fmt.Print("\tpassword: ")

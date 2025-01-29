@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/mshortcodes/sentry/internal/auth"
 	"github.com/mshortcodes/sentry/internal/crypt"
@@ -16,7 +17,7 @@ func cmdLogin(s *state) error {
 		return errors.New("must be logged out")
 	}
 
-	user, password, err := getUserInfo(s)
+	user, username, password, err := getUserInfo(s)
 	if err != nil {
 		return fmt.Errorf("invalid user info: %v", err)
 	}
@@ -39,24 +40,29 @@ func cmdLogin(s *state) error {
 	s.user = user
 	s.password = password
 	s.key = key
+	s.username = username
 
-	fmt.Printf("\tWelcome, %s\n\n", user.Username)
+	fmt.Printf("\tWelcome, %s\n\n", s.username)
 	return nil
 }
 
-func getUserInfo(s *state) (*database.User, string, error) {
+func getUserInfo(s *state) (user *database.User, username, password string, err error) {
 	fmt.Print("\tusername: ")
 	s.scanner.Scan()
-	username := s.scanner.Text()
-
-	user, err := s.db.GetUserByUsername(username)
+	username = s.scanner.Text()
+	username, err = validateInput(username)
 	if err != nil {
-		return &user, "", fmt.Errorf("couldn't get user: %v", err)
+		return nil, "", "", fmt.Errorf("error validating input: %v", err)
+	}
+
+	dbUser, err := s.db.GetUserByUsername(strings.ToLower(username))
+	if err != nil {
+		return nil, "", "", fmt.Errorf("couldn't get user: %v", err)
 	}
 
 	fmt.Print("\tpassword: ")
 	s.scanner.Scan()
-	password := s.scanner.Text()
+	password = s.scanner.Text()
 
-	return &user, password, nil
+	return &dbUser, username, password, nil
 }

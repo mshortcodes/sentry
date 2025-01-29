@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func cmdWipe(s *state) error {
 	err := validateUser(s)
@@ -12,7 +15,11 @@ func cmdWipe(s *state) error {
 		fmt.Print("\tWipe all passwords? [y/n] ")
 		s.scanner.Scan()
 		input := s.scanner.Text()
-		input = cleanInput(input)
+		input, err = validateInput(input)
+		if err != nil {
+			fmt.Errorf("error validating input: %v", err)
+		}
+		input = strings.ToLower(input)
 
 		switch input {
 		case "y":
@@ -25,7 +32,7 @@ func cmdWipe(s *state) error {
 }
 
 func wipePasswords(s *state) error {
-	fmt.Printf("\tWiping all passwords from %s...\n", s.user.Username)
+	fmt.Printf("\tWiping all passwords from %s...\n", s.username)
 	if err := s.db.WipePasswords(s.user.Id); err != nil {
 		return err
 	}
