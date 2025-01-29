@@ -53,10 +53,10 @@ func cmdGet(s *state) error {
 		}
 	}
 
-	return getPassword(s)
+	return getPasswordFromCache(s)
 }
 
-func getPassword(s *state) error {
+func getPasswordFromCache(s *state) error {
 	for {
 		printPasswords(s)
 		pwNumber, err := getPasswordInput(s)

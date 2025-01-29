@@ -6,7 +6,7 @@ import (
 
 func repl(s *state) {
 	cmds := getCmds()
-	printWelcomeMsg()
+	printWelcomeMessage()
 
 	for {
 		fmt.Print("sentry > ")
@@ -30,4 +30,9 @@ func repl(s *state) {
 			fmt.Printf("\t%v\n\n", err)
 		}
 	}
+}
+
+func printWelcomeMessage() {
+	fmt.Print("\tWelcome to Sentry!🛡️\n")
+	fmt.Print("\tType 'help' to view available comands\n\n")
 }

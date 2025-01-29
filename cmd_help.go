@@ -14,11 +14,11 @@ func cmdHelp(s *state) error {
 	}
 
 	slices.Sort(keys)
-	printHelpMsg(cmds, keys)
+	printHelpMessage(cmds, keys)
 	return nil
 }
 
-func printHelpMsg(cmds map[string]cmd, keys []string) {
+func printHelpMessage(cmds map[string]cmd, keys []string) {
 	for _, key := range keys {
 		fmt.Printf("\t%s - %s\n", cmds[key].name, cmds[key].description)
 	}

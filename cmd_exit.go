@@ -6,12 +6,12 @@ import (
 )
 
 func cmdExit(s *state) error {
-	printGoodbyeMsg(s)
+	printGoodbyeMessage(s)
 	os.Exit(0)
 	return nil
 }
 
-func printGoodbyeMsg(s *state) {
+func printGoodbyeMessage(s *state) {
 	fmt.Println("\tExiting Sentry...")
 
 	if s.user != nil {
