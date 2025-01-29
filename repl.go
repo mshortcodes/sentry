@@ -16,7 +16,7 @@ func repl(s *state) {
 
 		input, err := validateInput(input)
 		if err != nil {
-			fmt.Printf("error validating input: %v", err)
+			fmt.Printf("\terror validating input: %v\n\n", err)
 			continue
 		}
 
@@ -37,5 +37,5 @@ func repl(s *state) {
 
 func printWelcomeMessage() {
 	fmt.Print("\tWelcome to Sentry!🛡️\n")
-	fmt.Print("\tType 'help' to view available comands\n\n")
+	fmt.Print("\tType 'help' to view available commands\n\n")
 }
