@@ -15,19 +15,9 @@ func cmdCreate(s *state) error {
 		return errors.New("must be logged out")
 	}
 
-	fmt.Print("\tusername: ")
-	s.scanner.Scan()
-	username := s.scanner.Text()
-	username = validateInput(username)
-	if username == "" {
-		return errors.New("must enter a username")
-	}
-
-	fmt.Print("\tpassword: ")
-	s.scanner.Scan()
-	password := s.scanner.Text()
-	if len(password) < 8 {
-		return errors.New("password must be at least 8 chars")
+	username, password, err := getCreateInfo(s)
+	if err != nil {
+		return fmt.Errorf("error getting user info: %v", err)
 	}
 
 	hash, err := auth.HashPassword(password)
@@ -51,4 +41,23 @@ func cmdCreate(s *state) error {
 
 	fmt.Printf("\t%s has been created. Login to add passwords.\n\n", username)
 	return nil
+}
+
+func getCreateInfo(s *state) (string, string, error) {
+	fmt.Print("\tusername: ")
+	s.scanner.Scan()
+	username := s.scanner.Text()
+	username = validateInput(username)
+	if username == "" {
+		return "", "", errors.New("must enter a username")
+	}
+
+	fmt.Print("\tpassword: ")
+	s.scanner.Scan()
+	password := s.scanner.Text()
+	if len(password) < 8 {
+		return "", "", errors.New("password must be at least 8 chars")
+	}
+
+	return username, password, nil
 }
