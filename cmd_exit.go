@@ -6,15 +6,18 @@ import (
 )
 
 func cmdExit(s *state) error {
+	printGoodbyeMsg(s)
+	os.Exit(0)
+	return nil
+}
+
+func printGoodbyeMsg(s *state) {
 	fmt.Println("\tExiting Sentry...")
 
 	if s.user != nil {
 		fmt.Printf("\tGoodbye, %s!\n\n", s.user.Username)
-		os.Exit(0)
-		return nil
+		return
 	}
 
 	fmt.Print("\tGoodbye!\n\n")
-	os.Exit(0)
-	return nil
 }
