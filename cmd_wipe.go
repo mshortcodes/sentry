@@ -17,7 +17,7 @@ func cmdWipe(s *state) error {
 		input := s.scanner.Text()
 		input, err = validateInput(input)
 		if err != nil {
-			fmt.Errorf("error validating input: %v", err)
+			return fmt.Errorf("error validating input: %v", err)
 		}
 		input = strings.ToLower(input)
 
