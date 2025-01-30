@@ -39,6 +39,7 @@ func cmdAdd(s *state) error {
 		return fmt.Errorf("couldn't add password: %v", err)
 	}
 
+	s.cache = nil
 	fmt.Print("\tpassword saved\n\n")
 	return nil
 }
