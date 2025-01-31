@@ -39,13 +39,18 @@ func cmdAdd(s *state) error {
 		return fmt.Errorf("couldn't add password: %v", err)
 	}
 
+	if s.cache == nil {
+		s.cache = make(map[int]passwordInfo)
+	}
+
 	newCacheNum := len(s.cache) + 1
 	s.cache[newCacheNum] = passwordInfo{
 		name:     pwName,
 		password: password,
 	}
 
-	fmt.Print("\tpassword saved\n\n")
+	fmt.Println()
+	fmt.Printf("\t%s Password has been saved.\n\n", checkMark)
 	return nil
 }
 

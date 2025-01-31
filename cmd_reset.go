@@ -10,6 +10,6 @@ func cmdReset(s *state) error {
 	}
 
 	clearMemory(s)
-	fmt.Print("\tDatabase has been reset!\n\n")
+	fmt.Printf("\t%s Database has been reset!\n\n", checkMark)
 	return nil
 }

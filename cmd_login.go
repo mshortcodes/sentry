@@ -120,7 +120,7 @@ func addToCache(s *state, dbPasswords []database.Password) error {
 }
 
 func printLoginMessage(s *state) {
-	fmt.Printf("\tHello, %s.\n", s.username)
+	fmt.Printf("\t%s Hello, %s.\n", checkMark, s.username)
 
 	switch len(s.cache) {
 	case 1:

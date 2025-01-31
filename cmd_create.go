@@ -40,7 +40,7 @@ func cmdCreate(s *state) error {
 		return fmt.Errorf("couldn't create user: %v", err)
 	}
 
-	fmt.Printf("\t%s has been created. Login to add passwords.\n\n", username)
+	fmt.Printf("\t%s %s has been created. Login to add passwords.\n\n", checkMark, username)
 	return nil
 }
 
