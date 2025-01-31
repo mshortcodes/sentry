@@ -42,7 +42,18 @@ func cmdLogin(s *state) error {
 	s.key = key
 	s.username = username
 
-	fmt.Printf("\tWelcome, %s\n\n", s.username)
+	dbPasswords, err := fetchPasswords(s)
+	if err != nil {
+		return fmt.Errorf("error fetching passwords: %v", err)
+	}
+
+	err = addToCache(s, dbPasswords)
+	if err != nil {
+		return fmt.Errorf("failed to add to cache: %v", err)
+	}
+
+	fmt.Printf("\tHello, %s.\n", s.username)
+	fmt.Printf("\tYou have %d passwords saved.\n\n", len(s.cache))
 	return nil
 }
 
@@ -63,6 +74,48 @@ func getUserInfo(s *state) (user *database.User, username, password string, err 
 	fmt.Print("\tpassword: ")
 	s.scanner.Scan()
 	password = s.scanner.Text()
+	fmt.Println()
 
 	return &dbUser, username, password, nil
+}
+
+func fetchPasswords(s *state) ([]database.Password, error) {
+	dbPasswords, err := s.db.GetPasswords(s.user.Id)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get passwords: %v", err)
+	}
+
+	if dbPasswords == nil {
+		return []database.Password{}, nil
+	}
+
+	return dbPasswords, nil
+}
+
+func addToCache(s *state, dbPasswords []database.Password) error {
+	s.cache = make(map[int]passwordInfo)
+
+	for i, dbPassword := range dbPasswords {
+		dbPasswordNonce, err := hex.DecodeString(dbPassword.Nonce)
+		if err != nil {
+			return fmt.Errorf("error decoding nonce: %v", err)
+		}
+
+		ciphertext, err := hex.DecodeString(dbPassword.Password)
+		if err != nil {
+			return fmt.Errorf("error decoding ciphertext: %v", err)
+		}
+
+		plaintext, err := crypt.Decrypt(ciphertext, s.key, dbPasswordNonce)
+		if err != nil {
+			return fmt.Errorf("couldn't decrypt password: %v", err)
+		}
+
+		s.cache[i+1] = passwordInfo{
+			name:     dbPassword.Name,
+			password: plaintext,
+		}
+	}
+
+	return nil
 }

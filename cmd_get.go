@@ -1,14 +1,9 @@
 package main
 
 import (
-	"encoding/hex"
-	"errors"
 	"fmt"
 	"slices"
 	"strconv"
-
-	"github.com/mshortcodes/sentry/internal/crypt"
-	"github.com/mshortcodes/sentry/internal/database"
 )
 
 func cmdGet(s *state) error {
@@ -17,65 +12,11 @@ func cmdGet(s *state) error {
 		return err
 	}
 
-	if s.cache != nil {
-		return getPasswordFromCache(s)
+	if len(s.cache) == 0 {
+		fmt.Print("\tNo saved passwords\n\n")
+		return nil
 	}
 
-	dbPasswords, err := fetchPasswords(s)
-	if err != nil {
-		return fmt.Errorf("error fetching passwords: %v", err)
-	}
-
-	err = addToCache(s, dbPasswords)
-	if err != nil {
-		return fmt.Errorf("failed to add to cache: %v", err)
-	}
-
-	return getPasswordFromCache(s)
-}
-
-func addToCache(s *state, dbPasswords []database.Password) error {
-	s.cache = make(map[int]passwordInfo)
-
-	for i, dbPassword := range dbPasswords {
-		dbPasswordNonce, err := hex.DecodeString(dbPassword.Nonce)
-		if err != nil {
-			return fmt.Errorf("error decoding nonce: %v", err)
-		}
-
-		ciphertext, err := hex.DecodeString(dbPassword.Password)
-		if err != nil {
-			return fmt.Errorf("error decoding ciphertext: %v", err)
-		}
-
-		plaintext, err := crypt.Decrypt(ciphertext, s.key, dbPasswordNonce)
-		if err != nil {
-			return fmt.Errorf("couldn't decrypt password: %v", err)
-		}
-
-		s.cache[i+1] = passwordInfo{
-			name:     dbPassword.Name,
-			password: plaintext,
-		}
-	}
-
-	return nil
-}
-
-func fetchPasswords(s *state) ([]database.Password, error) {
-	dbPasswords, err := s.db.GetPasswords(s.user.Id)
-	if err != nil {
-		return nil, fmt.Errorf("couldn't get passwords: %v", err)
-	}
-
-	if len(dbPasswords) == 0 {
-		return nil, errors.New("no saved passwords")
-	}
-
-	return dbPasswords, nil
-}
-
-func getPasswordFromCache(s *state) error {
 	for {
 		printPasswords(s)
 		pwNumber, err := getPasswordInput(s)

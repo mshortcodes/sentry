@@ -37,5 +37,5 @@ func repl(s *state) {
 
 func printWelcomeMessage() {
 	fmt.Print("\tWelcome to Sentry!🛡️\n")
-	fmt.Print("\tType 'help' to view available commands\n\n")
+	fmt.Print("\tType 'help' to view available commands.\n\n")
 }
