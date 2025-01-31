@@ -52,8 +52,7 @@ func cmdLogin(s *state) error {
 		return fmt.Errorf("failed to add to cache: %v", err)
 	}
 
-	fmt.Printf("\tHello, %s.\n", s.username)
-	fmt.Printf("\tYou have %d passwords saved.\n\n", len(s.cache))
+	printLoginMessage(s)
 	return nil
 }
 
@@ -118,4 +117,15 @@ func addToCache(s *state, dbPasswords []database.Password) error {
 	}
 
 	return nil
+}
+
+func printLoginMessage(s *state) {
+	fmt.Printf("\tHello, %s.\n", s.username)
+
+	switch len(s.cache) {
+	case 1:
+		fmt.Printf("\tYou have %d password saved.\n\n", len(s.cache))
+	default:
+		fmt.Printf("\tYou have %d passwords saved.\n\n", len(s.cache))
+	}
 }
