@@ -16,7 +16,7 @@ func repl(s *state) {
 
 		input, err := validateInput(input)
 		if err != nil {
-			fmt.Printf("\t%s error validating input: %v\n\n", errMark, err)
+			fmt.Printf("\t%s error validating input: %v\n\n", errEmoji, err)
 			continue
 		}
 
@@ -24,18 +24,18 @@ func repl(s *state) {
 
 		cmd, ok := cmds[input]
 		if !ok {
-			fmt.Printf("\t%s invalid command\n\n", errMark)
+			fmt.Printf("\t%s invalid command\n\n", errEmoji)
 			continue
 		}
 
 		err = cmd.callback(s)
 		if err != nil {
-			fmt.Printf("\t%s %v\n\n", errMark, err)
+			fmt.Printf("\t%s %v\n\n", errEmoji, err)
 		}
 	}
 }
 
 func printWelcomeMessage() {
-	fmt.Printf("\tWelcome to Sentry!%s\n", sentryLogo)
+	fmt.Printf("\tWelcome to Sentry!%s\n", shieldEmoji)
 	fmt.Print("\tType 'help' to view available commands.\n\n")
 }

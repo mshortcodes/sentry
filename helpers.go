@@ -6,9 +6,10 @@ import (
 )
 
 var (
-	sentryLogo  = "🛡️"
-	checkMark   = "✔️"
-	errMark     = "❌"
+	shieldEmoji = "🛡️"
+	checkEmoji  = "✔️"
+	errEmoji    = "❌"
+	keyEmoji    = "🔑"
 	errNoName   = errors.New("must enter a name")
 	errNoSpaces = errors.New("no spaces allowed")
 )

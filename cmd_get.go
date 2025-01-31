@@ -21,17 +21,17 @@ func cmdGet(s *state) error {
 		printPasswords(s)
 		pwNumber, err := getPasswordInput(s)
 		if err != nil {
-			fmt.Printf("\t%s error getting password input: %v\n\n", errMark, err)
+			fmt.Printf("\t%s error getting password input: %v\n\n", errEmoji, err)
 			continue
 		}
 
 		pw, ok := s.cache[pwNumber]
 		if !ok {
-			fmt.Printf("\t%s invalid number\n\n", errMark)
+			fmt.Printf("\t%s invalid number\n\n", errEmoji)
 			continue
 		}
 
-		fmt.Printf("\t%s %s\n\n", checkMark, pw.password)
+		fmt.Printf("\t%s %s\n\n", keyEmoji, pw.password)
 		break
 	}
 

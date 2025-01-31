@@ -50,7 +50,7 @@ func cmdAdd(s *state) error {
 	}
 
 	fmt.Println()
-	fmt.Printf("\t%s Password has been saved.\n\n", checkMark)
+	fmt.Printf("\t%s Password has been saved.\n\n", checkEmoji)
 	return nil
 }
 
