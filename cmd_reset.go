@@ -9,7 +9,7 @@ func cmdReset(s *state) error {
 		return fmt.Errorf("failed to reset database: %v", err)
 	}
 
-	clearMemory(s)
+	s.clearMemory()
 	fmt.Printf("\t%s Database has been reset!\n\n", checkEmoji)
 	return nil
 }

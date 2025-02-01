@@ -8,12 +8,12 @@ func cmdLogout(s *state) error {
 		return nil
 	}
 
-	printLogoutMessage(s)
-	clearMemory(s)
+	s.printLogoutMessage()
+	s.clearMemory()
 
 	return nil
 }
 
-func printLogoutMessage(s *state) {
+func (s *state) printLogoutMessage() {
 	fmt.Printf("\t%s %s has been logged out\n\n", checkEmoji, s.username)
 }

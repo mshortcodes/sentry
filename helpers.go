@@ -14,7 +14,7 @@ var (
 	errNoSpaces = errors.New("no spaces allowed")
 )
 
-func validateUser(s *state) error {
+func (s *state) validateUser() error {
 	if s.user == nil {
 		return errors.New("must be logged in")
 	}
@@ -34,7 +34,7 @@ func validateInput(input string) (string, error) {
 	return args[0], nil
 }
 
-func clearMemory(s *state) {
+func (s *state) clearMemory() {
 	s.user = nil
 	s.username = ""
 	s.password = ""

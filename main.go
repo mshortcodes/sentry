@@ -9,21 +9,6 @@ import (
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
-type state struct {
-	db       *database.Client
-	user     *database.User
-	username string
-	password string
-	key      []byte
-	scanner  *bufio.Scanner
-	cache    map[int]passwordInfo
-}
-
-type passwordInfo struct {
-	name     string
-	password string
-}
-
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("couldn't load .env file: %v", err)

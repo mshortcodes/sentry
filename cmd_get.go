@@ -7,7 +7,7 @@ import (
 )
 
 func cmdGet(s *state) error {
-	err := validateUser(s)
+	err := s.validateUser()
 	if err != nil {
 		return err
 	}
@@ -18,8 +18,8 @@ func cmdGet(s *state) error {
 	}
 
 	for {
-		printPasswords(s)
-		pwNumber, err := getPasswordInput(s)
+		s.printPasswords()
+		pwNumber, err := s.getPasswordInput()
 		if err != nil {
 			fmt.Printf("\t%s error getting password input: %v\n\n", errEmoji, err)
 			continue
@@ -38,7 +38,7 @@ func cmdGet(s *state) error {
 	return nil
 }
 
-func printPasswords(s *state) {
+func (s *state) printPasswords() {
 	keys := make([]int, 0, len(s.cache))
 
 	for key := range s.cache {
@@ -54,7 +54,7 @@ func printPasswords(s *state) {
 	fmt.Println()
 }
 
-func getPasswordInput(s *state) (int, error) {
+func (s *state) getPasswordInput() (int, error) {
 	fmt.Print("\tnumber: ")
 	s.scanner.Scan()
 	pwNumber, err := strconv.Atoi(s.scanner.Text())

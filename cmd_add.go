@@ -9,12 +9,12 @@ import (
 )
 
 func cmdAdd(s *state) error {
-	err := validateUser(s)
+	err := s.validateUser()
 	if err != nil {
 		return err
 	}
 
-	pwName, password, err := getPasswordInfo(s)
+	pwName, password, err := s.getPasswordInfo()
 	if err != nil {
 		return fmt.Errorf("error getting password info: %v", err)
 	}
@@ -40,7 +40,7 @@ func cmdAdd(s *state) error {
 	}
 
 	if s.cache == nil {
-		s.cache = make(map[int]passwordInfo)
+		s.makeCache()
 	}
 
 	newCacheNum := len(s.cache) + 1
@@ -54,18 +54,18 @@ func cmdAdd(s *state) error {
 	return nil
 }
 
-func getPasswordInfo(s *state) (string, string, error) {
+func (s *state) getPasswordInfo() (password, pwName string, err error) {
 	fmt.Print("\tpassword name: ")
 	s.scanner.Scan()
-	pwName := s.scanner.Text()
-	pwName, err := validateInput(pwName)
+	pwName = s.scanner.Text()
+	pwName, err = validateInput(pwName)
 	if err != nil {
 		return "", "", fmt.Errorf("error validating input: %v", err)
 	}
 
 	fmt.Print("\tpassword: ")
 	s.scanner.Scan()
-	password := s.scanner.Text()
+	password = s.scanner.Text()
 	if len(password) < 8 {
 		return "", "", errors.New("password must be at least 8 chars")
 	}

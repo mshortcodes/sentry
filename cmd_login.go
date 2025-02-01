@@ -12,12 +12,12 @@ import (
 )
 
 func cmdLogin(s *state) error {
-	isLoggedIn := validateUser(s) == nil
+	isLoggedIn := s.validateUser() == nil
 	if isLoggedIn {
 		return errors.New("must be logged out")
 	}
 
-	user, username, password, err := getUserInfo(s)
+	user, username, password, err := s.getUserInfo()
 	if err != nil {
 		return fmt.Errorf("invalid user info: %v", err)
 	}
@@ -42,21 +42,21 @@ func cmdLogin(s *state) error {
 	s.key = key
 	s.username = username
 
-	dbPasswords, err := fetchPasswords(s)
+	dbPasswords, err := s.fetchPasswords()
 	if err != nil {
 		return fmt.Errorf("error fetching passwords: %v", err)
 	}
 
-	err = addToCache(s, dbPasswords)
+	err = s.addToCache(dbPasswords)
 	if err != nil {
 		return fmt.Errorf("failed to add to cache: %v", err)
 	}
 
-	printLoginMessage(s)
+	s.printLoginMessage()
 	return nil
 }
 
-func getUserInfo(s *state) (user *database.User, username, password string, err error) {
+func (s *state) getUserInfo() (user *database.User, username, password string, err error) {
 	fmt.Print("\tusername: ")
 	s.scanner.Scan()
 	username = s.scanner.Text()
@@ -78,7 +78,7 @@ func getUserInfo(s *state) (user *database.User, username, password string, err 
 	return &dbUser, username, password, nil
 }
 
-func fetchPasswords(s *state) ([]database.Password, error) {
+func (s *state) fetchPasswords() ([]database.Password, error) {
 	dbPasswords, err := s.db.GetPasswords(s.user.Id)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get passwords: %v", err)
@@ -91,35 +91,7 @@ func fetchPasswords(s *state) ([]database.Password, error) {
 	return dbPasswords, nil
 }
 
-func addToCache(s *state, dbPasswords []database.Password) error {
-	s.cache = make(map[int]passwordInfo)
-
-	for i, dbPassword := range dbPasswords {
-		dbPasswordNonce, err := hex.DecodeString(dbPassword.Nonce)
-		if err != nil {
-			return fmt.Errorf("error decoding nonce: %v", err)
-		}
-
-		ciphertext, err := hex.DecodeString(dbPassword.Password)
-		if err != nil {
-			return fmt.Errorf("error decoding ciphertext: %v", err)
-		}
-
-		plaintext, err := crypt.Decrypt(ciphertext, s.key, dbPasswordNonce)
-		if err != nil {
-			return fmt.Errorf("couldn't decrypt password: %v", err)
-		}
-
-		s.cache[i+1] = passwordInfo{
-			name:     dbPassword.Name,
-			password: plaintext,
-		}
-	}
-
-	return nil
-}
-
-func printLoginMessage(s *state) {
+func (s *state) printLoginMessage() {
 	fmt.Printf("\t%s Hello, %s.\n", checkEmoji, s.username)
 
 	switch len(s.cache) {

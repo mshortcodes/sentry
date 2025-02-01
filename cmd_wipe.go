@@ -6,7 +6,7 @@ import (
 )
 
 func cmdWipe(s *state) error {
-	err := validateUser(s)
+	err := s.validateUser()
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func cmdWipe(s *state) error {
 
 		switch input {
 		case "y":
-			return wipePasswords(s)
+			return s.wipePasswords()
 		default:
 			fmt.Println()
 			return nil
@@ -31,12 +31,13 @@ func cmdWipe(s *state) error {
 	}
 }
 
-func wipePasswords(s *state) error {
+func (s *state) wipePasswords() error {
 	fmt.Printf("\tWiping all passwords from %s...\n", s.username)
 	if err := s.db.WipePasswords(s.user.Id); err != nil {
 		return err
 	}
-	s.cache = nil
+	fmt.Println()
+	s.invalidateCache()
 	fmt.Printf("\t%s Passwords have been wiped!\n\n", checkEmoji)
 	return nil
 }

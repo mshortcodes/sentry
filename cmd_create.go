@@ -11,12 +11,12 @@ import (
 )
 
 func cmdCreate(s *state) error {
-	isLoggedIn := validateUser(s) == nil
+	isLoggedIn := s.validateUser() == nil
 	if isLoggedIn {
 		return errors.New("must be logged out")
 	}
 
-	username, password, err := getCreateInfo(s)
+	username, password, err := s.getCreateInfo()
 	if err != nil {
 		return fmt.Errorf("error getting user info: %v", err)
 	}
@@ -40,22 +40,23 @@ func cmdCreate(s *state) error {
 		return fmt.Errorf("couldn't create user: %v", err)
 	}
 
+	fmt.Println()
 	fmt.Printf("\t%s %s has been created. Login to add passwords.\n\n", checkEmoji, username)
 	return nil
 }
 
-func getCreateInfo(s *state) (string, string, error) {
+func (s *state) getCreateInfo() (username, password string, err error) {
 	fmt.Print("\tusername: ")
 	s.scanner.Scan()
-	username := s.scanner.Text()
-	username, err := validateInput(username)
+	username = s.scanner.Text()
+	username, err = validateInput(username)
 	if err != nil {
 		return "", "", fmt.Errorf("error validating input: %v", err)
 	}
 
 	fmt.Print("\tpassword: ")
 	s.scanner.Scan()
-	password := s.scanner.Text()
+	password = s.scanner.Text()
 	if len(password) < 8 {
 		return "", "", errors.New("password must be at least 8 chars")
 	}
