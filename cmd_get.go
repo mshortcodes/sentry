@@ -19,13 +19,13 @@ func cmdGet(s *state) error {
 
 	for {
 		s.printPasswords()
-		pwNumber, err := s.getPasswordInput()
+		pwIdx, err := s.getPasswordInput()
 		if err != nil {
 			fmt.Printf("\t%s error getting password input: %v\n\n", errEmoji, err)
 			continue
 		}
 
-		pw, ok := s.cache[pwNumber]
+		pw, ok := s.cache[pwIdx]
 		if !ok {
 			fmt.Printf("\t%s invalid number\n\n", errEmoji)
 			continue
@@ -54,13 +54,13 @@ func (s *state) printPasswords() {
 	fmt.Println()
 }
 
-func (s *state) getPasswordInput() (int, error) {
+func (s *state) getPasswordInput() (pwIdx int, err error) {
 	fmt.Print("\tnumber: ")
 	s.scanner.Scan()
-	pwNumber, err := strconv.Atoi(s.scanner.Text())
+	pwIdx, err = strconv.Atoi(s.scanner.Text())
 	if err != nil {
 		return 0, fmt.Errorf("must enter a number: %v", err)
 	}
 
-	return pwNumber, nil
+	return pwIdx, nil
 }

@@ -43,11 +43,8 @@ func cmdAdd(s *state) error {
 		s.makeCache()
 	}
 
-	newCacheNum := len(s.cache) + 1
-	s.cache[newCacheNum] = passwordInfo{
-		name:     pwName,
-		password: password,
-	}
+	pwIdx := len(s.cache) + 1
+	s.addToCache(password, pwName, pwIdx)
 
 	fmt.Println()
 	fmt.Printf("\t%s Password has been saved.\n\n", checkEmoji)

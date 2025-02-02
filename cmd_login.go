@@ -37,19 +37,28 @@ func cmdLogin(s *state) error {
 		return fmt.Errorf("failed to generate key: %v", err)
 	}
 
-	s.user = user
-	s.password = password
-	s.key = key
-	s.username = username
+	s.setUser(user)
+	s.setPassword(password)
+	s.setKey(key)
+	s.setUsername(username)
 
 	dbPasswords, err := s.fetchPasswords()
 	if err != nil {
 		return fmt.Errorf("error fetching passwords: %v", err)
 	}
 
-	err = s.addToCache(dbPasswords)
-	if err != nil {
-		return fmt.Errorf("failed to add to cache: %v", err)
+	s.makeCache()
+
+	for i, dbPassword := range dbPasswords {
+		plaintext, err := s.decrypt(dbPassword)
+		if err != nil {
+			return fmt.Errorf("error decrypting password: %v", err)
+		}
+
+		err = s.addToCache(plaintext, dbPassword.Name, i+1)
+		if err != nil {
+			return fmt.Errorf("failed to add to cache: %v", err)
+		}
 	}
 
 	s.printLoginMessage()
