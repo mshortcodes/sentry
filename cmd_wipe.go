@@ -36,6 +36,6 @@ func (s *state) wipePasswords() error {
 	}
 	fmt.Println()
 	s.invalidateCache()
-	fmt.Printf("\t%s Passwords have been wiped!\n\n", checkEmoji)
+	fmt.Printf("\t%s Passwords have been wiped!\n\n", success)
 	return nil
 }

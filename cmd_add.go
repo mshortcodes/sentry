@@ -47,7 +47,7 @@ func cmdAdd(s *state) error {
 	s.addToCache(password, pwName, pwIdx)
 
 	fmt.Println()
-	fmt.Printf("\t%s Password has been saved.\n\n", checkEmoji)
+	fmt.Printf("\t%s Password has been saved.\n\n", success)
 	return nil
 }
 

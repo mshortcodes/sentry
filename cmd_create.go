@@ -41,7 +41,7 @@ func cmdCreate(s *state) error {
 	}
 
 	fmt.Println()
-	fmt.Printf("\t%s %s has been created. Login to add passwords.\n\n", checkEmoji, username)
+	fmt.Printf("\t%s %s has been created. Login to add passwords.\n\n", success, username)
 	return nil
 }
 

@@ -15,5 +15,5 @@ func cmdLogout(s *state) error {
 }
 
 func (s *state) printLogoutMessage() {
-	fmt.Printf("\t%s %s has been logged out\n\n", checkEmoji, s.username)
+	fmt.Printf("\t%s %s has been logged out\n\n", success, s.username)
 }

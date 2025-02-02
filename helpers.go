@@ -5,11 +5,18 @@ import (
 	"strings"
 )
 
-var (
+const (
 	shieldEmoji = "🛡️"
-	checkEmoji  = "✔️"
-	errEmoji    = "❌"
-	keyEmoji    = "🔑"
+	success     = brightGreen + checkMark + reset
+	failure     = red + crossMark + reset
+	brightGreen = "\033[92m"
+	red         = "\033[31m"
+	reset       = "\033[0m"
+	checkMark   = "\u2713"
+	crossMark   = "\u2717"
+)
+
+var (
 	errEmpty    = errors.New("input can't be empty")
 	errNoSpaces = errors.New("no spaces allowed")
 )

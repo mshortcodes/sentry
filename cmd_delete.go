@@ -29,7 +29,7 @@ func cmdDelete(s *state) error {
 	}
 
 	s.deleteFromCache(pwIdx)
-	fmt.Printf("\t%s Password for %s has been deleted.\n\n", checkEmoji, pw.name)
+	fmt.Printf("\t%s Password for %s has been deleted.\n\n", success, pw.name)
 
 	return nil
 }

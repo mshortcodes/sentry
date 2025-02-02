@@ -101,7 +101,7 @@ func (s *state) fetchPasswords() ([]database.Password, error) {
 }
 
 func (s *state) printLoginMessage() {
-	fmt.Printf("\t%s Hello, %s.\n", checkEmoji, s.username)
+	fmt.Printf("\t%s Hello, %s.\n", success, s.username)
 
 	switch len(s.cache) {
 	case 1:
