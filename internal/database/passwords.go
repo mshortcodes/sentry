@@ -69,6 +69,20 @@ func (c Client) GetPasswords(userID int) ([]Password, error) {
 	return passwords, nil
 }
 
+func (c *Client) DeletePassword(userID int, pwName string) error {
+	query := `
+	DELETE FROM passwords
+	WHERE user_id = ?
+	AND name = ?
+	`
+
+	if _, err := c.db.Exec(query, userID, pwName); err != nil {
+		return fmt.Errorf("failed to delete password: %v", err)
+	}
+
+	return nil
+}
+
 func (c *Client) WipePasswords(userID int) error {
 	query := `
 	DELETE FROM passwords

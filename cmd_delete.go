@@ -28,9 +28,14 @@ func cmdDelete(s *state) error {
 		return errors.New("invalid number")
 	}
 
-	s.deleteFromCache(pwIdx)
-	fmt.Printf("\t%s Password for %s has been deleted.\n\n", success, pw.name)
+	err = s.db.DeletePassword(s.user.Id, pw.name)
+	if err != nil {
+		return fmt.Errorf("error deleting password: %v", err)
+	}
 
+	s.deleteFromCache(pwIdx)
+
+	fmt.Printf("\t%s Password for %s has been deleted.\n\n", success, pw.name)
 	return nil
 }
 
