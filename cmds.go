@@ -25,6 +25,11 @@ func getCmds() cmds {
 			description: "exits the program",
 			callback:    cmdExit,
 		},
+		"delete": {
+			name:        "delete",
+			description: "deletes a password",
+			callback:    cmdDelete,
+		},
 		"get": {
 			name:        "get",
 			description: "gets passwords",

@@ -57,7 +57,14 @@ func (s *state) printPasswords() {
 func (s *state) getPasswordInput() (pwIdx int, err error) {
 	fmt.Print("\tnumber: ")
 	s.scanner.Scan()
-	pwIdx, err = strconv.Atoi(s.scanner.Text())
+	input := s.scanner.Text()
+
+	input, err = validateInput(input)
+	if err != nil {
+		return 0, err
+	}
+
+	pwIdx, err = strconv.Atoi(input)
 	if err != nil {
 		return 0, fmt.Errorf("must enter a number: %v", err)
 	}
