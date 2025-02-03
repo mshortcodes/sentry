@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	"github.com/mshortcodes/sentry/internal/crypt"
 )
 
 func cmdEdit(s *state) error {
@@ -42,6 +44,26 @@ func cmdEdit(s *state) error {
 
 	if !s.checkIfUpdated(oldPw, passwordInfo{newPwName, newPw}) {
 		return nil
+	}
+
+	nonce, err := crypt.GenerateNonce()
+	if err != nil {
+		return fmt.Errorf("failed to generate nonce: %v", err)
+	}
+
+	ciphertext, err := crypt.Encrypt([]byte(newPw), s.key, nonce)
+	if err != nil {
+		return fmt.Errorf("failed to encrypt password: %v", err)
+	}
+
+	err = s.db.UpdatePassword(
+		s.user.Id,
+		oldPw.name,
+		newPwName,
+		fmt.Sprintf("%x", ciphertext),
+		fmt.Sprintf("%x", nonce))
+	if err != nil {
+		return fmt.Errorf("failed to update password: %v", err)
 	}
 
 	err = s.addToCache(newPw, newPwName, pwIdx)

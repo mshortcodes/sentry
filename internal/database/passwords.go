@@ -94,3 +94,24 @@ func (c *Client) WipePasswords(userID int) error {
 
 	return nil
 }
+
+func (c *Client) UpdatePassword(userID int, oldName, newName, password, nonce string) error {
+	query := `
+	UPDATE passwords
+	SET name = ?, password = ?, nonce = ?, updated_at = CURRENT_TIMESTAMP
+	WHERE user_id = ?
+	AND name = ?
+	`
+
+	if _, err := c.db.Exec(
+		query,
+		newName,
+		password,
+		nonce,
+		userID,
+		oldName); err != nil {
+		return fmt.Errorf("failed to update password: %v", err)
+	}
+
+	return nil
+}
