@@ -12,57 +12,57 @@ func getCmds() cmds {
 	return cmds{
 		"add": {
 			name:        "add",
-			description: "adds a new password",
+			description: "add a new password",
 			callback:    cmdAdd,
 		},
 		"create": {
 			name:        "create",
-			description: "creates a new user",
+			description: "create a new user",
 			callback:    cmdCreate,
 		},
 		"delete": {
 			name:        "delete",
-			description: "deletes a password",
+			description: "delete a password",
 			callback:    cmdDelete,
 		},
 		"edit": {
 			name:        "edit",
-			description: "updates a password and its name",
+			description: "edit a password and its name",
 			callback:    cmdEdit,
 		},
 		"exit": {
 			name:        "exit",
-			description: "exits the program",
+			description: "exit the program",
 			callback:    cmdExit,
 		},
 		"get": {
 			name:        "get",
-			description: "gets passwords",
+			description: "get passwords",
 			callback:    cmdGet,
 		},
 		"help": {
 			name:        "help",
-			description: "lists available commands",
+			description: "list available commands",
 			callback:    cmdHelp,
 		},
 		"login": {
 			name:        "login",
-			description: "logs a user in",
+			description: "log a user in",
 			callback:    cmdLogin,
 		},
 		"logout": {
 			name:        "logout",
-			description: "logs a user out",
+			description: "log a user out",
 			callback:    cmdLogout,
 		},
 		"reset": {
 			name:        "reset",
-			description: "deletes all users and all passwords",
+			description: "delete all users and passwords",
 			callback:    cmdReset,
 		},
 		"wipe": {
 			name:        "wipe",
-			description: "wipes all passwords from current user",
+			description: "delete all passwords from current user",
 			callback:    cmdWipe,
 		},
 	}

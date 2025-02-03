@@ -24,7 +24,7 @@ func cmdEdit(s *state) error {
 		return errors.New("invalid number")
 	}
 
-	newPwName, err := s.promptUpdateName()
+	newPwName, err := s.promptEditName()
 	if err != nil {
 		return fmt.Errorf("error getting new name: %v", err)
 	}
@@ -32,7 +32,7 @@ func cmdEdit(s *state) error {
 		newPwName = oldPw.name
 	}
 
-	newPw, err := s.promptUpdatePassword()
+	newPw, err := s.promptEditPassword()
 	if err != nil {
 		return fmt.Errorf("error getting new password: %v", err)
 	}
@@ -54,17 +54,15 @@ func cmdEdit(s *state) error {
 }
 
 func (s *state) checkIfUpdated(oldPw, newPw passwordInfo) bool {
-	switch {
-	case newPw.name != oldPw.name:
-		return true
-	case newPw.password != oldPw.password:
-		return true
-	default:
+	switch newPw {
+	case oldPw:
 		return false
+	default:
+		return true
 	}
 }
 
-func (s *state) promptUpdateName() (pwName string, err error) {
+func (s *state) promptEditName() (pwName string, err error) {
 	fmt.Print("\tUpdate name? [y/n] ")
 	s.scanner.Scan()
 	input := s.scanner.Text()
@@ -83,7 +81,7 @@ func (s *state) promptUpdateName() (pwName string, err error) {
 	}
 }
 
-func (s *state) promptUpdatePassword() (password string, err error) {
+func (s *state) promptEditPassword() (password string, err error) {
 	fmt.Print("\tUpdate password? [y/n] ")
 	s.scanner.Scan()
 	input := s.scanner.Text()
