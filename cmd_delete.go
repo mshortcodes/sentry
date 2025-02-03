@@ -18,7 +18,7 @@ func cmdDelete(s *state) error {
 
 	s.printPasswords()
 
-	pwIdx, err := s.getPasswordInput()
+	pwIdx, err := s.getPasswordIdx()
 	if err != nil {
 		return err
 	}

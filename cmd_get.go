@@ -19,7 +19,7 @@ func cmdGet(s *state) error {
 
 	for {
 		s.printPasswords()
-		pwIdx, err := s.getPasswordInput()
+		pwIdx, err := s.getPasswordIdx()
 		if err != nil {
 			fmt.Printf("\t%s error getting password input: %v\n\n", failure, err)
 			continue
@@ -54,7 +54,7 @@ func (s *state) printPasswords() {
 	fmt.Println()
 }
 
-func (s *state) getPasswordInput() (pwIdx int, err error) {
+func (s *state) getPasswordIdx() (pwIdx int, err error) {
 	fmt.Print("\tnumber: ")
 	s.scanner.Scan()
 	input := s.scanner.Text()
