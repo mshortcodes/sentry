@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"fmt"
+	"slices"
 
 	"github.com/mshortcodes/sentry/internal/database"
 )
@@ -34,6 +36,22 @@ func (s *state) addToCache(plaintext, pwName string, idx int) {
 
 func (s *state) invalidateCache() {
 	s.cache = nil
+}
+
+func (s *state) printPasswords() {
+	keys := make([]int, 0, len(s.cache))
+
+	for key := range s.cache {
+		keys = append(keys, key)
+	}
+
+	slices.Sort(keys)
+
+	for _, key := range keys {
+		fmt.Printf("\t[%d] %s\n", key, s.cache[key].name)
+	}
+
+	fmt.Println()
 }
 
 func (s *state) setUser(user *database.User) {

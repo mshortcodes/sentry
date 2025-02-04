@@ -15,13 +15,13 @@ func cmdCreate(s *state) error {
 		return errLoggedOut
 	}
 
-	username := s.getInput("username")
+	username := s.getInput("username: ")
 	username, err := validateInput(username)
 	if err != nil {
 		return err
 	}
 
-	password := s.getInput("password")
+	password := s.getInput("password: ")
 	err = validatePassword(password)
 	if err != nil {
 		return err

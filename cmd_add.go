@@ -13,13 +13,13 @@ func cmdAdd(s *state) error {
 		return err
 	}
 
-	pwName := s.getInput("password name")
+	pwName := s.getInput("password name: ")
 	pwName, err = validateInput(pwName)
 	if err != nil {
 		return err
 	}
 
-	password := s.getInput("password")
+	password := s.getInput("password: ")
 	err = validatePassword(password)
 	if err != nil {
 		return err

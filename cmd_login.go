@@ -14,27 +14,27 @@ import (
 func cmdLogin(s *state) error {
 	isLoggedIn := s.validateUser() == nil
 	if isLoggedIn {
-		return errors.New("must be logged out")
+		return errLoggedOut
 	}
 
 	user, username, password, err := s.getUserInfo()
 	if err != nil {
-		return fmt.Errorf("invalid user info: %v", err)
+		return err
 	}
 
 	err = auth.CheckPasswordHash(password, user.Password)
 	if err != nil {
-		return fmt.Errorf("incorrect password: %v", err)
+		return err
 	}
 
 	salt, err := hex.DecodeString(user.Salt)
 	if err != nil {
-		return fmt.Errorf("couldn't decode hex string: %v", err)
+		return err
 	}
 
 	key, err := crypt.GenerateKey([]byte(password), salt)
 	if err != nil {
-		return fmt.Errorf("failed to generate key: %v", err)
+		return err
 	}
 
 	s.setUser(user)
@@ -44,7 +44,7 @@ func cmdLogin(s *state) error {
 
 	dbPasswords, err := s.fetchPasswords()
 	if err != nil {
-		return fmt.Errorf("error fetching passwords: %v", err)
+		return err
 	}
 
 	s.makeCache()
@@ -78,12 +78,12 @@ func (s *state) getUserInfo() (user *database.User, username, password string, e
 	username = s.scanner.Text()
 	username, err = validateInput(username)
 	if err != nil {
-		return nil, "", "", fmt.Errorf("error validating input: %v", err)
+		return nil, "", "", err
 	}
 
 	dbUser, err := s.db.GetUserByUsername(strings.ToLower(username))
 	if err != nil {
-		return nil, "", "", fmt.Errorf("couldn't get user: %v", err)
+		return nil, "", "", err
 	}
 
 	fmt.Print("\tpassword: ")
@@ -97,7 +97,7 @@ func (s *state) getUserInfo() (user *database.User, username, password string, e
 func (s *state) fetchPasswords() ([]database.Password, error) {
 	dbPasswords, err := s.db.GetPasswords(s.user.Id)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't get passwords: %v", err)
+		return nil, err
 	}
 
 	if dbPasswords == nil {

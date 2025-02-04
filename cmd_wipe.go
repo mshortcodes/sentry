@@ -11,12 +11,10 @@ func cmdWipe(s *state) error {
 		return err
 	}
 
-	fmt.Print("\tWipe all passwords? [y/n] ")
-	s.scanner.Scan()
-	input := s.scanner.Text()
+	input := s.getInput("Wipe all passwords? [y/n] ")
 	input, err = validateInput(input)
 	if err != nil {
-		return fmt.Errorf("error validating input: %v", err)
+		return err
 	}
 	input = strings.ToLower(input)
 

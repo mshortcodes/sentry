@@ -17,7 +17,7 @@ func cmdDelete(s *state) error {
 
 	s.printPasswords()
 
-	pwIdxStr := s.getInput("number")
+	pwIdxStr := s.getInput("number: ")
 	pwIdxStr, err = validateInput(pwIdxStr)
 	if err != nil {
 		return err

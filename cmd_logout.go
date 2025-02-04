@@ -10,7 +10,6 @@ func cmdLogout(s *state) error {
 
 	s.printLogoutMessage()
 	s.clearMemory()
-
 	return nil
 }
 

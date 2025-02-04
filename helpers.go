@@ -29,7 +29,7 @@ var (
 )
 
 func (s *state) getInput(prompt string) string {
-	fmt.Printf("\t%s: ", prompt)
+	fmt.Printf("\t%s", prompt)
 	s.scanner.Scan()
 	input := s.scanner.Text()
 	return input

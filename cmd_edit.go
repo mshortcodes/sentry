@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -20,7 +21,7 @@ func cmdEdit(s *state) error {
 
 	s.printPasswords()
 
-	pwIdxStr := s.getInput("number")
+	pwIdxStr := s.getInput("number: ")
 	pwIdxStr, err = validateInput(pwIdxStr)
 	if err != nil {
 		return err
@@ -36,38 +37,49 @@ func cmdEdit(s *state) error {
 		return errInvalidNum
 	}
 
-	input := s.getInput("Update name? [y/n]")
+	input := s.getInput("Update name? [y/n] ")
 	input, err = validateInput(input)
 	if err != nil {
 		return err
 	}
 	input = strings.ToLower(input)
-	newPwName, err := s.handleInput(input, "password name")
-	if err != nil {
-		return err
-	}
 
-	input = s.getInput("Update password? [y/n]")
-	input, err = validateInput(input)
-	if err != nil {
-		return err
-	}
-	input = strings.ToLower(input)
-	newPw, err := s.handleInput(input, "password")
-	if err != nil {
-		return err
-	}
-	err = validatePassword(newPw)
-	if err != nil {
-		return err
-	}
-
-	if newPwName == "" {
+	var newPwName string
+	switch input {
+	case "y":
+		newPwName = s.getInput("new name: ")
+		newPwName, err = validateInput(newPwName)
+		if err != nil {
+			return err
+		}
+	case "n":
 		newPwName = oldPw.name
+	default:
+		return errors.New("invalid input")
 	}
-	if newPw == "" {
+
+	input = s.getInput("Update password? [y/n] ")
+	input, err = validateInput(input)
+	if err != nil {
+		return err
+	}
+	input = strings.ToLower(input)
+
+	var newPw string
+	switch input {
+	case "y":
+		newPw = s.getInput("password: ")
+		err = validatePassword(newPw)
+		if err != nil {
+			return err
+		}
+	case "n":
 		newPw = oldPw.password
+	default:
+		return errors.New("invalid input")
 	}
+
+	fmt.Println()
 
 	if !s.checkIfUpdated(oldPw, passwordInfo{newPwName, newPw}) {
 		return nil

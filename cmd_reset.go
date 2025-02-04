@@ -6,7 +6,7 @@ func cmdReset(s *state) error {
 	fmt.Print("\tResetting database...\n")
 
 	if err := s.db.Reset(); err != nil {
-		return fmt.Errorf("failed to reset database: %v", err)
+		return err
 	}
 
 	s.clearMemory()
