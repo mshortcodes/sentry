@@ -1,8 +1,8 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/mshortcodes/sentry/internal/crypt"
@@ -15,33 +15,55 @@ func cmdEdit(s *state) error {
 	}
 
 	if len(s.cache) == 0 {
-		fmt.Print("\tNo saved passwords\n\n")
-		return nil
+		return errNoPasswords
 	}
 
 	s.printPasswords()
 
-	pwIdx, err := s.getPasswordIdx()
+	pwIdxStr := s.getInput("number")
+	pwIdxStr, err = validateInput(pwIdxStr)
 	if err != nil {
-		return fmt.Errorf("error getting input: %v", err)
+		return err
+	}
+
+	pwIdx, err := strconv.Atoi(pwIdxStr)
+	if err != nil {
+		return errEnterNum
 	}
 
 	oldPw, ok := s.cache[pwIdx]
 	if !ok {
-		return errors.New("invalid number")
+		return errInvalidNum
 	}
 
-	newPwName, err := s.promptEditName()
+	input := s.getInput("Update name? [y/n]")
+	input, err = validateInput(input)
 	if err != nil {
-		return fmt.Errorf("error getting new name: %v", err)
+		return err
 	}
+	input = strings.ToLower(input)
+	newPwName, err := s.handleInput(input, "password name")
+	if err != nil {
+		return err
+	}
+
+	input = s.getInput("Update password? [y/n]")
+	input, err = validateInput(input)
+	if err != nil {
+		return err
+	}
+	input = strings.ToLower(input)
+	newPw, err := s.handleInput(input, "password")
+	if err != nil {
+		return err
+	}
+	err = validatePassword(newPw)
+	if err != nil {
+		return err
+	}
+
 	if newPwName == "" {
 		newPwName = oldPw.name
-	}
-
-	newPw, err := s.promptEditPassword()
-	if err != nil {
-		return fmt.Errorf("error getting new password: %v", err)
 	}
 	if newPw == "" {
 		newPw = oldPw.password
@@ -53,12 +75,12 @@ func cmdEdit(s *state) error {
 
 	nonce, err := crypt.GenerateNonce()
 	if err != nil {
-		return fmt.Errorf("failed to generate nonce: %v", err)
+		return err
 	}
 
 	ciphertext, err := crypt.Encrypt([]byte(newPw), s.key, nonce)
 	if err != nil {
-		return fmt.Errorf("failed to encrypt password: %v", err)
+		return err
 	}
 
 	err = s.db.UpdatePassword(
@@ -68,16 +90,26 @@ func cmdEdit(s *state) error {
 		fmt.Sprintf("%x", ciphertext),
 		fmt.Sprintf("%x", nonce))
 	if err != nil {
-		return fmt.Errorf("failed to update password: %v", err)
+		return err
 	}
 
-	err = s.addToCache(newPw, newPwName, pwIdx)
-	if err != nil {
-		return fmt.Errorf("couldn't update password: %v", err)
-	}
-
+	s.addToCache(newPw, newPwName, pwIdx)
 	fmt.Printf("\t%s Password has been updated.\n\n", success)
 	return nil
+}
+
+func (s *state) handleInput(input, prompt string) (string, error) {
+	switch input {
+	case "y":
+		newInput := s.getInput(prompt)
+		newInput, err := validateInput(newInput)
+		if err != nil {
+			return "", err
+		}
+		return newInput, nil
+	default:
+		return "", nil
+	}
 }
 
 func (s *state) checkIfUpdated(oldPw, newPw passwordInfo) bool {
@@ -87,67 +119,4 @@ func (s *state) checkIfUpdated(oldPw, newPw passwordInfo) bool {
 	default:
 		return true
 	}
-}
-
-func (s *state) promptEditName() (pwName string, err error) {
-	fmt.Print("\tUpdate name? [y/n] ")
-	s.scanner.Scan()
-	input := s.scanner.Text()
-	input, err = validateInput(input)
-	if err != nil {
-		return "", fmt.Errorf("error validating input: %v", err)
-	}
-	input = strings.ToLower(input)
-
-	switch input {
-	case "y":
-		return s.getNewName()
-	default:
-		fmt.Println()
-		return "", nil
-	}
-}
-
-func (s *state) promptEditPassword() (password string, err error) {
-	fmt.Print("\tUpdate password? [y/n] ")
-	s.scanner.Scan()
-	input := s.scanner.Text()
-	input, err = validateInput(input)
-	if err != nil {
-		return "", fmt.Errorf("error validating input: %v", err)
-	}
-	input = strings.ToLower(input)
-
-	switch input {
-	case "y":
-		return s.getNewPassword()
-	default:
-		fmt.Println()
-		return "", nil
-	}
-}
-
-func (s *state) getNewName() (pwName string, err error) {
-	fmt.Print("\tpassword name: ")
-	s.scanner.Scan()
-	pwName = s.scanner.Text()
-	pwName, err = validateInput(pwName)
-	if err != nil {
-		return "", fmt.Errorf("error validating input: %v", err)
-	}
-	fmt.Println()
-
-	return pwName, nil
-}
-
-func (s *state) getNewPassword() (password string, err error) {
-	fmt.Print("\tpassword: ")
-	s.scanner.Scan()
-	password = s.scanner.Text()
-	if len(password) < 8 {
-		return "", errors.New("password must be at least 8 chars")
-	}
-	fmt.Println()
-
-	return password, nil
 }

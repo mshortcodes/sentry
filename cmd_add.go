@@ -54,6 +54,5 @@ func cmdAdd(s *state) error {
 
 	fmt.Println()
 	fmt.Printf("\t%s Password has been saved.\n\n", success)
-
 	return nil
 }

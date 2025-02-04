@@ -50,15 +50,22 @@ func cmdLogin(s *state) error {
 	s.makeCache()
 
 	for i, dbPassword := range dbPasswords {
-		plaintext, err := s.decrypt(dbPassword)
+		dbPasswordNonce, err := hex.DecodeString(dbPassword.Nonce)
 		if err != nil {
-			return fmt.Errorf("error decrypting password: %v", err)
+			return errors.New("error decoding nonce")
 		}
 
-		err = s.addToCache(plaintext, dbPassword.Name, i+1)
+		ciphertext, err := hex.DecodeString(dbPassword.Password)
 		if err != nil {
-			return fmt.Errorf("failed to add to cache: %v", err)
+			return errors.New("error decoding ciphertext")
 		}
+
+		plaintext, err := crypt.Decrypt(ciphertext, s.key, dbPasswordNonce)
+		if err != nil {
+			return errors.New("couldn't decrypt password")
+		}
+
+		s.addToCache(plaintext, dbPassword.Name, i+1)
 	}
 
 	s.printLoginMessage()

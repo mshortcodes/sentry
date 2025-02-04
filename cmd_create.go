@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -13,7 +12,7 @@ import (
 func cmdCreate(s *state) error {
 	isLoggedIn := s.validateUser() == nil
 	if isLoggedIn {
-		return errors.New("must be logged out")
+		return errLoggedOut
 	}
 
 	username := s.getInput("username")

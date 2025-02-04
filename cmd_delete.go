@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -13,8 +12,7 @@ func cmdDelete(s *state) error {
 	}
 
 	if len(s.cache) == 0 {
-		fmt.Print("\tNo saved passwords\n\n")
-		return nil
+		return errNoPasswords
 	}
 
 	s.printPasswords()
@@ -27,12 +25,12 @@ func cmdDelete(s *state) error {
 
 	pwIdx, err := strconv.Atoi(pwIdxStr)
 	if err != nil {
-		return errors.New("must enter a number")
+		return errEnterNum
 	}
 
 	pw, ok := s.cache[pwIdx]
 	if !ok {
-		return errors.New("invalid number")
+		return errInvalidNum
 	}
 
 	err = s.db.DeletePassword(s.user.Id, pw.name)

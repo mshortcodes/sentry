@@ -18,8 +18,14 @@ const (
 )
 
 var (
-	errEmpty    = errors.New("input can't be empty")
-	errNoSpaces = errors.New("no spaces allowed")
+	errEmpty       = errors.New("input can't be empty")
+	errNoSpaces    = errors.New("no spaces allowed")
+	errLoggedIn    = errors.New("must be logged in")
+	errLoggedOut   = errors.New("must be logged out")
+	errPassword    = errors.New("password must be at least 8 chars")
+	errNoPasswords = errors.New("no saved passwords")
+	errEnterNum    = errors.New("must enter a number")
+	errInvalidNum  = errors.New("invalid number")
 )
 
 func (s *state) getInput(prompt string) string {
@@ -44,7 +50,7 @@ func validateInput(input string) (string, error) {
 
 func validatePassword(password string) error {
 	if len(password) < 8 {
-		return errors.New("password must be at least 8 characters long")
+		return errPassword
 	}
 	return nil
 }
