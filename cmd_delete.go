@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 func cmdDelete(s *state) error {
@@ -18,9 +19,15 @@ func cmdDelete(s *state) error {
 
 	s.printPasswords()
 
-	pwIdx, err := s.getPasswordIdx()
+	pwIdxStr := s.getInput("number")
+	pwIdxStr, err = validateInput(pwIdxStr)
 	if err != nil {
 		return err
+	}
+
+	pwIdx, err := strconv.Atoi(pwIdxStr)
+	if err != nil {
+		return errors.New("must enter a number")
 	}
 
 	pw, ok := s.cache[pwIdx]
@@ -30,7 +37,7 @@ func cmdDelete(s *state) error {
 
 	err = s.db.DeletePassword(s.user.Id, pw.name)
 	if err != nil {
-		return fmt.Errorf("error deleting password: %v", err)
+		return err
 	}
 
 	s.deleteFromCache(pwIdx)

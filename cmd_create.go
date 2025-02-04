@@ -16,19 +16,26 @@ func cmdCreate(s *state) error {
 		return errors.New("must be logged out")
 	}
 
-	username, password, err := s.getCreateInfo()
+	username := s.getInput("username")
+	username, err := validateInput(username)
 	if err != nil {
-		return fmt.Errorf("error getting user info: %v", err)
+		return err
+	}
+
+	password := s.getInput("password")
+	err = validatePassword(password)
+	if err != nil {
+		return err
 	}
 
 	hash, err := auth.HashPassword(password)
 	if err != nil {
-		return fmt.Errorf("couldn't hash password: %v", err)
+		return err
 	}
 
 	salt, err := crypt.GenerateSalt()
 	if err != nil {
-		return fmt.Errorf("couldn't generate salt: %v", err)
+		return err
 	}
 
 	err = s.db.CreateUser(database.CreateUserParams{
@@ -37,29 +44,10 @@ func cmdCreate(s *state) error {
 		Salt:     fmt.Sprintf("%x", salt),
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't create user: %v", err)
+		return err
 	}
 
 	fmt.Println()
 	fmt.Printf("\t%s %s has been created. Login to add passwords.\n\n", success, username)
 	return nil
-}
-
-func (s *state) getCreateInfo() (username, password string, err error) {
-	fmt.Print("\tusername: ")
-	s.scanner.Scan()
-	username = s.scanner.Text()
-	username, err = validateInput(username)
-	if err != nil {
-		return "", "", fmt.Errorf("error validating input: %v", err)
-	}
-
-	fmt.Print("\tpassword: ")
-	s.scanner.Scan()
-	password = s.scanner.Text()
-	if len(password) < 8 {
-		return "", "", errors.New("password must be at least 8 chars")
-	}
-
-	return username, password, nil
 }

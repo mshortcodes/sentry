@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/mshortcodes/sentry/internal/crypt"
@@ -28,12 +27,12 @@ func cmdAdd(s *state) error {
 
 	nonce, err := crypt.GenerateNonce()
 	if err != nil {
-		return fmt.Errorf("failed to generate nonce: %v", err)
+		return err
 	}
 
 	ciphertext, err := crypt.Encrypt([]byte(password), s.key, nonce)
 	if err != nil {
-		return fmt.Errorf("failed to encrypt password: %v", err)
+		return err
 	}
 
 	err = s.db.AddPassword(database.AddPasswordParams{
@@ -43,7 +42,7 @@ func cmdAdd(s *state) error {
 		Nonce:    fmt.Sprintf("%x", nonce),
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't add password: %v", err)
+		return err
 	}
 
 	if s.cache == nil {
@@ -57,23 +56,4 @@ func cmdAdd(s *state) error {
 	fmt.Printf("\t%s Password has been saved.\n\n", success)
 
 	return nil
-}
-
-func (s *state) getPasswordInfo() (password, pwName string, err error) {
-	fmt.Print("\tpassword name: ")
-	s.scanner.Scan()
-	pwName = s.scanner.Text()
-	pwName, err = validateInput(pwName)
-	if err != nil {
-		return "", "", fmt.Errorf("error validating input: %v", err)
-	}
-
-	fmt.Print("\tpassword: ")
-	s.scanner.Scan()
-	password = s.scanner.Text()
-	if len(password) < 8 {
-		return "", "", errors.New("password must be at least 8 chars")
-	}
-
-	return pwName, password, nil
 }

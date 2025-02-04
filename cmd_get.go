@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 	"strconv"
@@ -66,7 +67,7 @@ func (s *state) getPasswordIdx() (pwIdx int, err error) {
 
 	pwIdx, err = strconv.Atoi(input)
 	if err != nil {
-		return 0, fmt.Errorf("must enter a number: %v", err)
+		return 0, errors.New("must enter a number")
 	}
 
 	return pwIdx, nil
