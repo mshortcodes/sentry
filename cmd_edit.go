@@ -14,6 +14,11 @@ func cmdEdit(s *state) error {
 		return err
 	}
 
+	if len(s.cache) == 0 {
+		fmt.Print("\tNo saved passwords\n\n")
+		return nil
+	}
+
 	s.printPasswords()
 
 	pwIdx, err := s.getPasswordIdx()

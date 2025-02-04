@@ -16,7 +16,7 @@ func repl(s *state) {
 
 		input, err := validateInput(input)
 		if err != nil {
-			fmt.Printf("\t%s error validating input: %v\n\n", failure, err)
+			fmt.Printf("\t%s %v\n\n", failure, err)
 			continue
 		}
 

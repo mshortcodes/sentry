@@ -14,9 +14,16 @@ func cmdAdd(s *state) error {
 		return err
 	}
 
-	pwName, password, err := s.getPasswordInfo()
+	pwName := s.getInput("password name")
+	pwName, err = validateInput(pwName)
 	if err != nil {
-		return fmt.Errorf("error getting password info: %v", err)
+		return err
+	}
+
+	password := s.getInput("password")
+	err = validatePassword(password)
+	if err != nil {
+		return err
 	}
 
 	nonce, err := crypt.GenerateNonce()
@@ -48,6 +55,7 @@ func cmdAdd(s *state) error {
 
 	fmt.Println()
 	fmt.Printf("\t%s Password has been saved.\n\n", success)
+
 	return nil
 }
 

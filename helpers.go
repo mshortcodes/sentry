@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -21,6 +22,13 @@ var (
 	errNoSpaces = errors.New("no spaces allowed")
 )
 
+func (s *state) getInput(prompt string) string {
+	fmt.Printf("\t%s: ", prompt)
+	s.scanner.Scan()
+	input := s.scanner.Text()
+	return input
+}
+
 func validateInput(input string) (string, error) {
 	args := strings.Fields(input)
 
@@ -32,4 +40,11 @@ func validateInput(input string) (string, error) {
 	}
 
 	return args[0], nil
+}
+
+func validatePassword(password string) error {
+	if len(password) < 8 {
+		return errors.New("password must be at least 8 characters long")
+	}
+	return nil
 }
