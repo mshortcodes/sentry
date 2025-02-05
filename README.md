@@ -24,7 +24,7 @@
 
 Sentry is a terminal-based password manager. I enjoy CLI tools and working in the terminal in general. I also use password managers regularly and recently completed the cryptography course on Boot.dev so I thought this would be a good project to work on.
 
-Sentry is fast, uses a SQLite database, supports multiple users, encrypts passwords, and implements a cache. This was the first project I had done completely in Neovim which was an additional fun challenge.
+Sentry is a fast REPL, uses a SQLite database, supports multiple users, encrypts passwords, and implements a cache. This was the first project I had done completely in Neovim which was an additional fun challenge.
 
 Key concepts:
 
@@ -38,47 +38,51 @@ Key concepts:
 
 ## Commands
 
-### `add`
+### `add` 🔒
+
+Add a new password.
+
+![add](images/add.png)
 
 ---
 
-### `create`
+### `create` 🔒
 
 ---
 
-### `delete`
+### `delete` 🔒
 
 ---
 
-### `edit`
+### `edit` 🔒
 
 ---
 
-### `exit`
+### `exit` 🔓
 
 ---
 
-### `get`
+### `get` 🔓
 
 ---
 
-### `help`
+### `help` 🔓
 
 ---
 
-### `login`
+### `login` 🔓
 
 ---
 
-### `logout`
+### `logout` 🔒
 
 ---
 
-### `reset`
+### `reset` 🔓
 
 ---
 
-### `wipe`
+### `wipe` 🔒
 
 ---
 
