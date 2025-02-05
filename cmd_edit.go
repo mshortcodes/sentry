@@ -37,7 +37,7 @@ func cmdEdit(s *state) error {
 		return errInvalidNum
 	}
 
-	input := s.getInput("Update name? [y/n] ")
+	input := s.getInput("update name? [y/n] ")
 	input, err = validateInput(input)
 	if err != nil {
 		return err
@@ -58,7 +58,7 @@ func cmdEdit(s *state) error {
 		return errors.New("invalid input")
 	}
 
-	input = s.getInput("Update password? [y/n] ")
+	input = s.getInput("update password? [y/n] ")
 	input, err = validateInput(input)
 	if err != nil {
 		return err

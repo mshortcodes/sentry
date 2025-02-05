@@ -46,35 +46,67 @@ Add a new password.
 
 ---
 
-### `create` 🔒
+### `create` 🔓
+
+Create a new user.
+
+![create](images/create.png)
 
 ---
 
 ### `delete` 🔒
 
+Delete a password.
+
+![delete](images/delete.png)
+
 ---
 
 ### `edit` 🔒
+
+Edit a password and its name.
+
+![edit](images/edit.png)
 
 ---
 
 ### `exit` 🔓
 
+Exit the program.
+
+![exit](images/exit.png)
+
 ---
 
 ### `get` 🔓
+
+Get passwords.
+
+![get](images/get.png)
 
 ---
 
 ### `help` 🔓
 
+List available commands.
+
+![help](images/help.png)
+
 ---
 
 ### `login` 🔓
 
+Log a user in.
+
+![login](images/login.png)
+
 ---
 
 ### `logout` 🔒
+
+Log a user out.
+
+![logout](images/logout.png)
 
 ---
 
@@ -83,6 +115,10 @@ Add a new password.
 ---
 
 ### `wipe` 🔒
+
+Wipe all passwords from current user.
+
+![wipe](images/wipe.png)
 
 ---
 
