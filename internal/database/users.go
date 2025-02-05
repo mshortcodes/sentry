@@ -56,7 +56,7 @@ func (c Client) GetUserByUsername(username string) (User, error) {
 		&user.Password,
 		&user.Salt); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return User{}, fmt.Errorf("no users with that username: %v", err)
+			return User{}, errors.New("no users with that username")
 		}
 		return User{}, err
 	}

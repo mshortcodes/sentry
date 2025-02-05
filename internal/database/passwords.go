@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
@@ -35,7 +36,7 @@ func (c Client) AddPassword(params AddPasswordParams) error {
 		params.UserID,
 		params.Nonce,
 	); err != nil {
-		return fmt.Errorf("failed to add password")
+		return errors.New("failed to add password - possible duplicate")
 	}
 
 	return nil

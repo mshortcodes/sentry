@@ -20,6 +20,7 @@ func cmdAdd(s *state) error {
 	}
 
 	password := s.getInput("password: ")
+	fmt.Println()
 	err = validatePassword(password)
 	if err != nil {
 		return err
@@ -52,7 +53,6 @@ func cmdAdd(s *state) error {
 	pwIdx := len(s.cache) + 1
 	s.addToCache(password, pwName, pwIdx)
 
-	fmt.Println()
 	fmt.Printf("\t%s Password has been saved.\n\n", success)
 	return nil
 }

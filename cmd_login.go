@@ -17,17 +17,26 @@ func cmdLogin(s *state) error {
 		return errLoggedOut
 	}
 
-	user, username, password, err := s.getUserInfo()
+	username := s.getInput("username: ")
+	username, err := validateInput(username)
 	if err != nil {
 		return err
 	}
 
-	err = auth.CheckPasswordHash(password, user.Password)
+	dbUser, err := s.db.GetUserByUsername(strings.ToLower(username))
 	if err != nil {
 		return err
 	}
 
-	salt, err := hex.DecodeString(user.Salt)
+	password := s.getInput("password: ")
+	fmt.Println()
+
+	err = auth.CheckPasswordHash(password, dbUser.Password)
+	if err != nil {
+		return err
+	}
+
+	salt, err := hex.DecodeString(dbUser.Salt)
 	if err != nil {
 		return err
 	}
@@ -37,7 +46,7 @@ func cmdLogin(s *state) error {
 		return err
 	}
 
-	s.setUser(user)
+	s.setUser(&dbUser)
 	s.setPassword(password)
 	s.setKey(key)
 	s.setUsername(username)
@@ -70,28 +79,6 @@ func cmdLogin(s *state) error {
 
 	s.printLoginMessage()
 	return nil
-}
-
-func (s *state) getUserInfo() (user *database.User, username, password string, err error) {
-	fmt.Print("\tusername: ")
-	s.scanner.Scan()
-	username = s.scanner.Text()
-	username, err = validateInput(username)
-	if err != nil {
-		return nil, "", "", err
-	}
-
-	dbUser, err := s.db.GetUserByUsername(strings.ToLower(username))
-	if err != nil {
-		return nil, "", "", err
-	}
-
-	fmt.Print("\tpassword: ")
-	s.scanner.Scan()
-	password = s.scanner.Text()
-	fmt.Println()
-
-	return &dbUser, username, password, nil
 }
 
 func (s *state) fetchPasswords() ([]database.Password, error) {

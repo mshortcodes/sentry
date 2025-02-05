@@ -1,11 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func cmdLogout(s *state) error {
 	if s.user == nil {
-		fmt.Print("\tno user is logged in\n\n")
-		return nil
+		return errors.New("no user is logged in")
 	}
 
 	s.printLogoutMessage()
