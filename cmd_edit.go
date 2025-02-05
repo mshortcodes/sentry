@@ -110,20 +110,6 @@ func cmdEdit(s *state) error {
 	return nil
 }
 
-func (s *state) handleInput(input, prompt string) (string, error) {
-	switch input {
-	case "y":
-		newInput := s.getInput(prompt)
-		newInput, err := validateInput(newInput)
-		if err != nil {
-			return "", err
-		}
-		return newInput, nil
-	default:
-		return "", nil
-	}
-}
-
 func (s *state) checkIfUpdated(oldPw, newPw passwordInfo) bool {
 	switch newPw {
 	case oldPw:
