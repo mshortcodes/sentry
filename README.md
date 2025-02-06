@@ -15,9 +15,7 @@
   - [Logout](#logout)
   - [Reset](#reset)
   - [Wipe](#wipe)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+- [Installation](#installation)
   - [Database Setup](#database-setup)
 
 ## About
@@ -38,7 +36,7 @@ Key concepts:
 
 ## Commands
 
-### `add` 🔒
+### add 🔒
 
 Add a new password.
 
@@ -122,10 +120,20 @@ Wipe all passwords from current user.
 
 ---
 
-## Getting Started
+## Installation
 
-### Prerequisites
+Sentry only works on Linux/Mac and requires Golang. If on Windows, use WSL.
 
-### Installation
+1. Install Go 1.22 or later
+
+```bash
+curl -sS https://webi.sh/golang | sh
+```
+
+2. Install Sentry
+
+```bash
+go install github.com/mshortcodes/sentry
+```
 
 ### Database Setup
