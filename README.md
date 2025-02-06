@@ -124,7 +124,7 @@ Wipe all passwords from current user.
 
 Sentry only works on Linux/Mac and requires Golang. If on Windows, use WSL.
 
-1. Install Go 1.22 or later
+1. Install Go 1.22 or later with the webi installer below or [official instructions](https://go.dev/doc/install).
 
 ```bash
 curl -sS https://webi.sh/golang | sh

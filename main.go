@@ -5,18 +5,18 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/mshortcodes/sentry/internal/database"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("couldn't load .env file: %v", err)
+	err := createProjectDir()
+	if err != nil {
+		log.Fatalf("couldn't create project directory: %v", err)
 	}
 
-	dbPath := os.Getenv("DB_PATH")
-	if dbPath == "" {
-		log.Fatal("DB_PATH must be set")
+	dbPath, err := getDBPath()
+	if err != nil {
+		log.Fatalf("couldn't get database path: %v", err)
 	}
 
 	db, err := database.NewClient(dbPath)
