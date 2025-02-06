@@ -4,19 +4,7 @@
 
 - [About](#about)
 - [Commands](#commands)
-  - [Add](#add)
-  - [Create](#create)
-  - [Delete](#delete)
-  - [Edit](#edit)
-  - [Exit](#exit)
-  - [Get](#get)
-  - [Help](#help)
-  - [Login](#login)
-  - [Logout](#logout)
-  - [Reset](#reset)
-  - [Wipe](#wipe)
 - [Installation](#installation)
-  - [Database Setup](#database-setup)
 
 ## About
 
@@ -36,89 +24,19 @@ Key concepts:
 
 ## Commands
 
-### add 🔒
-
-Add a new password.
-
-![add](images/add.png)
-
----
-
-### `create` 🔓
-
-Create a new user.
-
-![create](images/create.png)
-
----
-
-### `delete` 🔒
-
-Delete a password.
-
-![delete](images/delete.png)
-
----
-
-### `edit` 🔒
-
-Edit a password and its name.
-
-![edit](images/edit.png)
-
----
-
-### `exit` 🔓
-
-Exit the program.
-
-![exit](images/exit.png)
-
----
-
-### `get` 🔓
-
-Get passwords.
-
-![get](images/get.png)
-
----
-
-### `help` 🔓
-
-List available commands.
-
-![help](images/help.png)
-
----
-
-### `login` 🔓
-
-Log a user in.
-
-![login](images/login.png)
-
----
-
-### `logout` 🔒
-
-Log a user out.
-
-![logout](images/logout.png)
-
----
-
-### `reset` 🔓
-
----
-
-### `wipe` 🔒
-
-Wipe all passwords from current user.
-
-![wipe](images/wipe.png)
-
----
+| Name     | Description                               |
+| -------- | ----------------------------------------- |
+| `add`    | Add a new password.                       |
+| `create` | Create a new user.                        |
+| `delete` | Delete a password.                        |
+| `edit`   | Edit a password and its name.             |
+| `exit`   | Exit the program.                         |
+| `get`    | Get passwords.                            |
+| `help`   | List available commands.                  |
+| `login`  | Log a user in.                            |
+| `logout` | Log a user out.                           |
+| `reset`  | Delete all users and passwords.           |
+| `wipe`   | Wipe all passwords from the current user. |
 
 ## Installation
 
@@ -135,5 +53,3 @@ curl -sS https://webi.sh/golang | sh
 ```bash
 go install github.com/mshortcodes/sentry
 ```
-
-### Database Setup

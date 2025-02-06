@@ -62,7 +62,7 @@ func getCmds() cmds {
 		},
 		"wipe": {
 			name:        "wipe",
-			description: "delete all passwords from current user",
+			description: "delete all passwords from the current user",
 			callback:    cmdWipe,
 		},
 	}
