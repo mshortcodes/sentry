@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"log"
 	"os"
 
@@ -26,9 +27,13 @@ func main() {
 
 	scanner := bufio.NewScanner(os.Stdin)
 
+	admin := flag.Bool("admin", false, "run Sentry in admin mode")
+	flag.Parse()
+
 	state := state{
 		db:      &db,
 		scanner: scanner,
+		admin:   *admin,
 	}
 
 	repl(&state)

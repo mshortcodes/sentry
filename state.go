@@ -13,6 +13,7 @@ type state struct {
 	user     *database.User
 	username string
 	password string
+	admin    bool
 	key      []byte
 	scanner  *bufio.Scanner
 	cache    map[int]passwordInfo
