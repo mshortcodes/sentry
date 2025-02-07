@@ -24,19 +24,21 @@ Key concepts:
 
 ## Commands
 
-| Name     | Description                               |
-| -------- | ----------------------------------------- |
-| `add`    | Add a new password.                       |
-| `create` | Create a new user.                        |
-| `delete` | Delete a password.                        |
-| `edit`   | Edit a password and its name.             |
-| `exit`   | Exit the program.                         |
-| `get`    | Get passwords.                            |
-| `help`   | List available commands.                  |
-| `login`  | Log a user in.                            |
-| `logout` | Log a user out.                           |
-| `reset`  | Delete all users and passwords.           |
-| `wipe`   | Wipe all passwords from the current user. |
+| Name      | Description                               |
+| --------- | ----------------------------------------- |
+| `add`     | Add a new password.                       |
+| `create`  | Create a new user.                        |
+| `delete`  | Delete a password.                        |
+| `edit`    | Edit a password and its name.             |
+| `exit`    | Exit the program.                         |
+| `get`     | Get passwords.                            |
+| `help`    | List available commands.                  |
+| `login`   | Log a user in.                            |
+| `logout`  | Log a user out.                           |
+| `reset`\* | Delete all users and passwords.           |
+| `wipe`    | Wipe all passwords from the current user. |
+
+\*Only allowed in admin mode. To run Sentry in admin mode, provide the admin flag: `sentry --admin`
 
 ## Installation
 
