@@ -1,10 +1,13 @@
-# Sentry 🛡️
+# 🛡️ Sentry
 
 ## ☰ Table of Contents
 
 - [About](#about)
 - [Commands](#commands)
 - [Installation](#installation)
+- [Usage](#usage)
+
+<a id="about"></a>
 
 ## 📖 About
 
@@ -21,6 +24,8 @@ Key concepts:
 - Writing SQL queries
 - CRUD operations
 - Input parsing/validation
+
+<a id="commands"></a>
 
 ## ⌨️ Commands
 
@@ -40,6 +45,8 @@ Key concepts:
 
 \*Only allowed in admin mode.
 
+<a id="installation"></a>
+
 ## ⚙️ Installation
 
 Sentry only works on Linux/Mac and requires Golang. If on Windows, use WSL.
@@ -55,6 +62,8 @@ curl -sS https://webi.sh/golang | sh
 ```bash
 go install github.com/mshortcodes/sentry
 ```
+
+<a id="usage"></a>
 
 ## 🚀 Usage
 
