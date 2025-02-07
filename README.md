@@ -1,12 +1,12 @@
 # Sentry 🛡️
 
-## Table of Contents
+## ☰ Table of Contents
 
 - [About](#about)
 - [Commands](#commands)
 - [Installation](#installation)
 
-## About
+## 📖 About
 
 Sentry is a terminal-based password manager. I enjoy CLI tools and working in the terminal in general. I also use password managers regularly and recently completed the cryptography course on Boot.dev so I thought this would be a good project to work on.
 
@@ -22,7 +22,7 @@ Key concepts:
 - CRUD operations
 - Input parsing/validation
 
-## Commands
+## ⌨️ Commands
 
 | Name      | Description                               |
 | --------- | ----------------------------------------- |
@@ -38,9 +38,9 @@ Key concepts:
 | `reset`\* | Delete all users and passwords.           |
 | `wipe`    | Wipe all passwords from the current user. |
 
-\*Only allowed in admin mode. To run Sentry in admin mode, provide the admin flag: `sentry --admin`
+\*Only allowed in admin mode.
 
-## Installation
+## ⚙️ Installation
 
 Sentry only works on Linux/Mac and requires Golang. If on Windows, use WSL.
 
@@ -55,3 +55,21 @@ curl -sS https://webi.sh/golang | sh
 ```bash
 go install github.com/mshortcodes/sentry
 ```
+
+## 🚀 Usage
+
+Once installed, run Sentry from anywhere in the terminal:
+
+```bash
+sentry
+```
+
+Or in admin mode:
+
+```bash
+sentry --admin
+```
+
+![demo](images/demo.gif)
+
+## Contributing
