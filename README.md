@@ -71,5 +71,3 @@ sentry --admin
 ```
 
 ![demo](images/demo.gif)
-
-## Contributing
