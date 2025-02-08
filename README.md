@@ -1,6 +1,6 @@
-# 🛡️ Sentry
+# Sentry 🛡️
 
-## ☰ Table of Contents
+## 📄 Table of Contents
 
 - [About](#about)
 - [Commands](#commands)
